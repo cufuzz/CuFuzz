@@ -1,0 +1,367 @@
+3.4. nvJPEG Encoder API Referenceï
+
+This section describes the nvJPEG Encoder API.
+
+
+3.4.1. nvjpegEncodeGetBufferSize()ï
+
+Returns the maximum possible buffer size that is needed to store the compressed JPEG stream, for the given input parameters.
+Signature:
+
+nvjpegStatus_t nvjpegEncodeGetBufferSize(
+    nvjpegHandle_t handle,
+    const nvjpegEncoderParams_t encoder_params,
+    int image_width,
+    int image_height,
+    size_t *max_stream_length);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+handle
+Input
+Host
+Library handle.
+
+
+encoder_params
+Input/Output
+Host
+Encoder parameters structure handle.
+
+
+image_width
+Input
+Host
+Input image width.
+
+
+image_height
+Input
+Host
+Input image height.
+
+
+stream
+Input
+Host
+CUDA stream where all the required device operations will be placed.
+
+
+
+
+
+
+3.4.2. nvjpegEncodeYUV()ï
+
+Compresses the image in YUV colorspace to JPEG stream using the provided parameters, and stores it in the state structure.
+Signature:
+
+nvjpegStatus_t nvjpegEncodeYUV(
+    nvjpegHandle_t handle,
+    nvjpegEncoderState_t encoder_state,
+    const nvjpegEncoderParams_t encoder_params,
+    const nvjpegImage_t *source,
+    nvjpegChromaSubsampling_t chroma_subsampling,
+    int image_width,
+    int image_height,
+    cudaStream_t stream);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+handle
+Input
+Host
+Library handle.
+
+
+encoder_state
+Input/Output
+Host
+Internal structure that holds the temporary buffers required for the compression and also stores the final compressed JPEG stream.
+
+
+encoder_params
+Input
+Host
+Encoder parameters structure handle.
+
+
+source
+Input
+Host
+Pointer to the nvjpeg structure that holds the device pointers to the Y, U(Cb) and V(Cr) image planes and the respective strides.
+
+
+chroma_subsampling
+Input
+Host
+Chroma subsampling of the input data.
+
+
+image_width
+Input
+Host
+Input image width.
+
+
+image_height
+Input
+Host
+Input image height.
+
+
+stream
+Input
+Host
+CUDA stream where all the required device operations will be placed.
+
+
+
+
+
+
+3.4.3. nvjpegEncodeImage()ï
+
+Compresses the image in the provided format to the JPEG stream using the provided parameters, and stores it in the state structure.
+Signature:
+
+nvjpegStatus_t nvjpegEncodeImage(
+    nvjpegHandle_t handle,
+    nvjpegEncoderState_t encoder_state,
+    const nvjpegEncoderParams_t encoder_params,
+    const nvjpegImage_t *source,
+    nvjpegInputFormat_t input_format,
+    int image_width,
+    int image_height,
+    cudaStream_t stream);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+handle
+Input
+Host
+Library handle.
+
+
+encoder_state
+Input/Output
+Host
+Internal structure that holds the temporary buffers required for the compression and also stores the final compressed JPEG stream.
+
+
+encoder_params
+Input
+Host
+Encoder parameters structure handle.
+
+
+source
+Input
+Host
+Pointer to the nvjpeg structure that holds the device pointers to the Y, U(Cb) and V(Cr) image planes and the respective strides.
+
+
+input_format
+Input
+Host
+Value of nvjpegInputFormat_t type that describes the input data.
+
+
+image_width
+Input
+Host
+Input image width.
+
+
+image_height
+Input
+Host
+Input image height.
+
+
+stream
+Input
+Host
+CUDA stream where all the required device operations will be placed.
+
+
+
+
+
+
+3.4.4. nvjpegEncodeRetrieveBitstream()ï
+
+Retrieves the compressed stream from the encoder state that was previously used in one of the encoder functions.
+
+If data parameter is NULL then the encoder will return compressed stream size in the length parameter.
+If data is not NULL then the provided length parameter should contain the data buffer size.
+If the provided length is less than compressed stream size, then an error will be returned. Otherwise the compressed stream will be stored in the data buffer and the actual compressed buffer size will be stored in the length parameter.
+
+Signature:
+
+nvjpegStatus_t nvjpegEncodeRetrieveBitstream(
+    nvjpegHandle_t handle,
+    nvjpegEncoderState_t encoder_state,
+    unsigned char *data,
+    size_t *length,
+    cudaStream_t stream);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+handle
+Input
+Host
+Library handle.
+
+
+encoder_state
+Input/Output
+Host
+The encoder_state that was previously used in one of the encoder functions.
+
+
+data
+Input/Output
+Host
+Pointer to the buffer in the host memory where the compressed stream will be stored. Can be NULL (see description).
+
+
+length
+Input/Output
+Host
+Pointer to the input buffer size. On return the NVJPEG library will store the actual compressed stream size in this parameter.
+
+
+stream
+Input
+Host
+CUDA stream where all the required device operations will be placed.
+
+
+
+
+
+
+3.4.5. nvjpegEncodeRetrieveBitstreamDevice()ï
+
+Retrieves the compressed stream from the encoder state that was previously used in one of the encoder functions.
+
+data parameter should be on device memory
+If data parameter is NULL then the encoder will return compressed stream size in the length parameter.
+If data is not NULL then the provided length parameter should contain the data buffer size.
+If the provided length is less than compressed stream size, then an error will be returned. Otherwise the compressed stream will be stored in the data buffer and the actual compressed buffer size will be stored in the length parameter.
+
+Signature:
+
+nvjpegStatus_t nvjpegEncodeRetrieveBitstreamDevice(
+    nvjpegHandle_t handle,
+    nvjpegEncoderState_t encoder_state,
+    unsigned char *data,
+    size_t *length,
+    cudaStream_t stream);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+handle
+Input
+Host
+Library handle.
+
+
+encoder_state
+Input/Output
+Host
+The encoder_state that was previously used in one of the encoder functions.
+
+
+data
+Input/Output
+Device
+Pointer to the buffer in the device memory where the compressed stream will be stored. Can be NULL (see description).
+
+
+length
+Input/Output
+Host
+Pointer to the input buffer size. On return the NVJPEG library will store the actual compressed stream size in this parameter.
+
+
+stream
+Input
+Host
+CUDA stream where all the required device operations will be placed.

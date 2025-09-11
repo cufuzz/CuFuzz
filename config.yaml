@@ -1,0 +1,72 @@
+# which lib you want to fuzz
+lib: 'cusolver'             # choose one lib you want to test from ['rt', 'nvjpeg', 'cublas', 'cunpp', 'cufft', 'curand', 'cusolver', 'cusparse']
+
+cuda_v: 'cuda-13.0'
+
+input_json:
+  rt: ['./rt-lib/cudasample2json/gpt4o_output_calls_only_cu.json', 
+        './rt-lib/cudasample2json/gpt4o_output_order_only_cu.json',
+        './rt-lib/pdf2json/gpt4o_output_calls.json',
+        './rt-lib/pdf2json/gpt4o_output_order.json']
+
+  nvjpeg: ['./nvjpeg/sample2json/gpt4o_output_order.json',
+            './nvjpeg/tutorial2json/gpt4o_output_calls.json',
+            './nvjpeg/tutorial2json/gpt4o_output_order.json']
+
+  cublas: ['./cublas/cudasample2json/gpt4o_output_calls.json',
+            './cublas/cudasample2json/gpt4o_output_order.json',
+            './cublas/pdf2json/gpt4o_output_calls.json',
+            './cublas/pdf2json/gpt4o_output_order.json']
+
+  cunpp: ['./cunpp/cudasample2json/gpt4o_output_calls.json',
+            './cunpp/cudasample2json/gpt4o_output_order.json']
+
+  cufft: ['./cufft/cudasample2json/gpt4o_output_calls.json',
+            './cufft/cudasample2json/gpt4o_output_order.json',
+            './cufft/pdf2json/gpt4o_output_calls.json',
+            './cufft/pdf2json/gpt4o_output_order.json']
+  
+  curand: ['./curand/cudasample2json/gpt4o_output_calls.json',
+            './curand/cudasample2json/gpt4o_output_order.json',
+            './curand/pdf2json/gpt4o_output_calls.json',
+            './curand/pdf2json/gpt4o_output_order.json']
+  
+  cusolver: ['./cusolver/cudasample2json/gpt4o_output_calls.json',
+            './cusolver/cudasample2json/gpt4o_output_order.json',
+            './cusolver/pdf2json/gpt4o_output_calls.json',
+            './cusolver/pdf2json/gpt4o_output_order.json']
+  
+  cusparse: ['./cusparse/cudasample2json/gpt4o_output_calls.json',
+            './cusparse/cudasample2json/gpt4o_output_order.json',
+            './cusparse/pdf2json/gpt4o_output_calls.json',
+            './cusparse/pdf2json/gpt4o_output_order.json']
+
+
+
+# schedule
+process:
+  time_threshold: 36000
+  the_continue_edge_file: ''
+
+
+# harness config
+harness:
+  mutator: false           # whether using llm-based harness mutator
+  the_max_fix_num: 3       # max times the harness fixing
+
+
+# llm config
+llm:
+  base_url: "https://api.gpt.ge/v1/"
+  api-key: 'sk-WXtqOuBZPY096KTcDdE866275274464d88943d068aA7Ff5d'
+
+# fuzz_one confg
+fuzz_one:
+  norm: 4096               #  the max length of vector or matrix size( 65536 is the max you could set)  cublas:256  , other : 4096
+  loops: 2000             #  the loop times the harness executing
+  executing_time_first: 2       #   the maximum execution time limit (for nvjpeg seting 4, others 2)
+  executing_time_repetition: 1       #   the maximum execution time limit (for nvjpeg seting 3, others 1)
+
+
+
+  

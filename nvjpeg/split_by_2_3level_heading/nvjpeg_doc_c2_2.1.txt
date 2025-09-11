@@ -1,0 +1,360 @@
+2.1. Using JPEG Decodingï
+
+âThe nvJPEG library provides functions for both the decoding of a single image, and batched decoding of multiple images.
+
+
+2.1.1. Single Image Decodingï
+
+For single-image decoding you provide the data size and a pointer to the file data, and the decoded image is placed in the output buffer.
+To use the nvJPEG library, start by calling the helper functions for initialization.
+
+Create nvJPEG library handle with one of the helper functions nvjpegCreateSimple() or nvjpegCreateEx().
+
+Create JPEG state with the helper function nvjpegJpegStateCreate(). See nvJPEG Type Declarations and nvjpegJpegStateCreate().
+The following helper functions are available in the nvJPEG library:
+
+nvjpegStatus_t nvjpegGetProperty(libraryPropertyType type, int *value);
+[DEPRECATED] nvjpegStatus_t nvjpegCreate(nvjpegBackend_t backend, nvjpegHandle_t *handle , nvjpeg_dev_allocator allocator);
+nvjpegStatus_t nvjpegCreateSimple(nvjpegHandle_t *handle);
+nvjpegStatus_t nvjpegCreateEx(nvjpegBackend_t backend, nvjpegDevAllocator_t *dev_allocator, nvjpegPinnedAllocator_t *pinned_allocator, unsigned int flags, nvjpegHandle_t *handle);
+nvjpegStatus_t nvjpegDestroy(nvjpegHandle_t handle);
+nvjpegStatus_t nvjpegJpegStateCreate(nvjpegHandle_t handle, nvjpegJpegState_t *jpeg_handle);
+nvjpegStatus_t nvjpegJpegStateDestroy(nvjpegJpegState handle);
+Other helper functions such as nvjpegSet*() and nvjpegGet*() can be used to configure the library functionality on per-handle basis. Refer to the nvJPEG Helper API Reference for more details.
+
+
+
+Retrieve the width and height information from the JPEG-encoded image by using the nvjpegGetImageInfo() function.
+Below is the signature of nvjpegGetImageInfo()function:
+
+nvjpegStatus_t nvjpegGetImageInfo(
+nvjpegHandle_t              handle,
+const unsigned char         *data,
+size_t                      length,
+int                         *nComponents,
+nvjpegChromaSubsampling_t   *subsampling,
+int                         *widths,
+int                         *heights);
+
+
+For each image to be decoded, pass the JPEG data pointer and data length to the above function. The nvjpegGetImageInfo() function is thread safe.
+
+One of the outputs of the above nvjpegGetImageInfo() function is nvjpegChromaSubsampling_t. This parameter is an enum type, and its enumerator list is composed of the chroma subsampling property retrieved from the JPEG image. See nvJPEG Chroma Subsampling.
+
+Use the nvjpegDecode() function in the nvJPEG library to decode this single JPEG image. See the signature of this function below:
+
+nvjpegStatus_t nvjpegDecode(
+nvjpegHandle_t          handle,
+nvjpegJpegState_t       jpeg_handle,
+const unsigned char     *data,
+size_t                  length,
+nvjpegOutputFormat_t    output_format,
+nvjpegImage_t           *destination,
+cudaStream_t            stream);
+
+
+In the above nvjpegDecode() function, the parameters nvjpegOutputFormat_t, nvjpegImage_t, and cudaStream_t can be used to set the output behavior of the nvjpegDecode()function. You provide the cudaStream_t parameter to indicate the stream to which your asynchronous tasks are submitted.
+
+
+The ``nvjpegOutputFormat_t`` parameter:
+The nvjpegOutputFormat_t parameter can be set to one of the output_format settings below:
+
+
+
+
+
+
+
+output_format
+Meaning
+
+
+NVJPEG_OUTPUT_UNCHANGED
+Return the decoded image planar format.
+
+
+NVJPEG_OUTPUT_RGB
+Convert to planar RGB.
+
+
+NVJPEG_OUTPUT_BGR
+Convert to planar BGR.
+
+
+NVJPEG_OUTPUT_RGBI
+Convert to interleaved RGB.
+
+
+NVJPEG_OUTPUT_BGRI
+Convert to interleaved BGR.
+
+
+NVJPEG_OUTPUT_Y
+Return the Y component only.
+
+
+NVJPEG_OUTPUT_YUV
+Return in the YUV planar format.
+
+
+NVJPEG_OUTPUT_UNCHANGEDI_U16
+Return the decoded image interleaved format.
+
+
+
+
+
+For example, if output_format is set to NVJPEG_OUTPUT_Y or NVJPEG_OUTPUT_RGBI, or NVJPEG_OUTPUT_BGRI then the output is written only to channel[0] of nvjpegImage_t, and the other channels are not touched.
+Alternately, in the case of planar output, the data is written to the corresponding channels of the nvjpegImage_t destination structure.
+Finally, in the case of grayscale JPEG and RGB output, the luminance is used to create the grayscale RGB.
+The below table explains the combinations of the output formats and the number of channels supported by the library.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+No of Channels in bitstream
+1
+2
+3
+4
+
+
+Output Format
+
+
+NVJPEG_OUTPUT_UNCHANGED
+Yes
+Yes
+Yes
+Yes
+
+
+NVJPEG_OUTPUT_YUV
+Only the first channel of the output is populated
+No
+Yes
+No
+
+
+NVJPEG_OUTPUT_Y
+Yes
+No
+Yes
+Yes(a) :ref:`nvjpeg-single-image-decoding__first
+
+
+NVJPEG_OUTPUT_RGB
+Yes(b) :ref:`nvjpeg-single-image-decoding__second
+No
+Yes
+Yes(a) :ref:`nvjpeg-single-image-decoding__first
+
+
+NVJPEG_OUTPUT_BGR
+Yes(b) :ref:`nvjpeg-single-image-decoding__second
+No
+Yes
+Yes(a) :ref:`nvjpeg-single-image-decoding__first
+
+
+NVJPEG_OUTPUT_RGBI
+Yes(b) :ref:`nvjpeg-single-image-decoding__second
+No
+Yes
+Yes(a) :ref:`nvjpeg-single-image-decoding__first
+
+
+NVJPEG_OUTPUT_BGRI
+Yes(b) :ref:`nvjpeg-single-image-decoding__second
+No
+Yes
+Yes(a) :ref:`nvjpeg-single-image-decoding__first
+
+
+NVJPEG_OUTPUT_UNCHANGEDI_U16
+Yes(c)
+Yes
+No
+No
+
+
+
+NOTES:
+
+Must be enabled using nvjpegDecodeParamsSetAllowCMYK().
+Luminance is used to create the grayscale RGB.
+Supported only by NVJPEG_BACKEND_LOSSLESS_JPEG backend.
+
+
+
+
+
+
+
+
+
+
+
+As mentioned above, an important benefit of the nvjpegGetImageInfo()function is the ability to utilize the image information retrieved from the the input JPEG image to allocate proper GPU memory for your decoding operation.
+The nvjpegGetImageInfo() function returns the widths, heights and nComponents parameters.
+
+nvjpegStatus_t nvjpegGetImageInfo(
+nvjpegHandle_t             handle,
+const unsigned char        *data,
+size_t                     length,
+int                        *nComponents,
+nvjpegChromaSubsampling_t  *subsampling,
+int                        *widths,
+int                        *heights);
+
+
+You can use the retrieved parameters, widths, heights and nComponents, to calculate the required size for the output buffers, either for a single decoded JPEG, or for every decoded JPEG in a batch.
+To optimally set the destination parameter for the nvjpegDecode() function, use the following guidelines:
+
+
+
+
+
+
+
+
+
+For the output_format:
+NVJPEG_OUTPUT_Y
+
+destination.pitch[0] should be at least: width[0]
+destination.channel[0] should be at least of size: destination.pitch[0]*height[0]
+
+
+For the output_format
+destination.pitch[c] should be at least:
+destination.channel[c] should be at least of size:
+
+
+NVJPEG_OUTPUT_YUV
+width[c] for c = 0, 1, 2
+destination.pitch[c]*height[c] for c = 0, 1, 2
+
+
+NVJPEG_OUTPUT_RGB and NVJPEG_OUTPUT_BGR
+width[0] for c = 0, 1, 2
+destination.pitch[0]*height[0] for c = 0, 1, 2
+
+
+NVJPEG_OUTPUT_RGBI and NVJPEG_OUTPUT_BGRI
+width[0]*3
+destination.pitch[0]*height[0]
+
+
+NVJPEG_OUTPUT_UNCHANGED
+width[c] for c = [ 0, nComponents - 1 ]
+destination.pitch[c]*height[c] for c = [ 0, nComponents - 1]
+
+
+NVJPEG_OUTPUT_UNCHANGEDI_U16
+width[c]* nComponents* sizeof(unsigned short)
+destination.pitch[c]*height[c] for c = [ 0, nComponents - 1]
+
+
+
+
+
+Ensure that the nvJPEG Image structure (or structures, in the case of batched decode) is filled with the pointers and pitches of allocated buffers. The nvjpegImage_t structure that holds the output pointers is defined as follows:
+
+typedef struct
+{
+   unsigned char * channel[NVJPEG_MAX_COMPONENT];
+   size_t pitch[NVJPEG_MAX_COMPONENT];
+} nvjpegImage_t;
+
+
+NVJPEG_MAX_COMPONENT is the maximum number of color components the nvJPEG library supports in the current release. For generic images, this is the maximum number of encoded channels that the library is able to decompress.
+
+Finally, when you call the nvjpegDecode() function with the parameters as described above, the nvjpegDecode() function fills the output buffers with the decoded data.
+
+
+
+
+2.1.2. Decode using Decoupled Phasesï
+
+The nvJPEG library allows further separation of the host and device phases of the decode process. The host phase of the decoding will not need to access to device resources.
+A few examples of decoupled APIs can be found under Decode APIâDecoupled Decoding.
+Below is the sequence of API calls to decode a single image
+
+
+Initialize all the items that are used in the decoding process:
+
+Create the library handle using one of the library handle initialization routines.
+Choose decoder implementation nvjpegBackend_t, and create decoder using nvjpegDecoderCreate().
+Create JPEG decoder state using nvjpegDecoderStateCreate().
+Create JPEG stream using nvjpegJpegStreamCreate().
+
+Create the pinned and device buffers used by the decoder using the below APIs respectively. These buffers are used to store intermediate decoding results.
+
+nvjpegBufferPinnedCreate()
+nvjpegBufferDeviceCreate()
+
+
+
+Link the buffers to the JPEG state using the following APIs respectively:
+
+nvjpegStateAttachPinnedBuffer()
+nvjpegStateAttachDeviceBuffer()
+
+
+
+Create decode parameters using the below API. This is used to set the output format, and enable ROI decode:
+nvjpegDecodeParamsCreate()
+
+
+
+
+Perform decoding:
+
+
+Parse the jpeg bit-stream using nvjpegJpegStreamParse()
+
+
+Encoded bitstream information, like channel dimensions, can be retrieved using the below API. This information is used to allocate the output pointers in nvjpegImage_t.
+
+nvjpegJpegStreamGetComponentsNum()
+nvjpegJpegStreamGetComponentDimensions()
+
+
+
+
+
+Call the decode API in the below sequence to decode the image:
+
+nvjpegDecodeJpegHost()
+nvjpegDecodeJpegTransferToDevice()
+nvjpegDecodeJpegDevice()
+
+
+
+
+
+
+
+
+2.1.3. Batched Image Decodingï
+
+For the batched image decoding you provide pointers to multiple file data in the memory, and also provide the buffer sizes for each file data. The nvJPEG library will decode these multiple images, and will place the decoded data in the output buffers that you specified in the parameters.
+
+
+2.1.3.1. Single Phaseï
+
+For batched image decoding in single phase, follow these steps:
+
+Call nvjpegDecodeBatchedInitialize() function to initialize the batched decoder. Specify the batch size in the batch_size parameter. See nvjpegDecodeBatchedInitialize().
+Next, call nvjpegDecodeBatched() for each new batch. Make sure to pass the parameters that are correct to the specific batch of images. If the size of the batch changes, or if the batch decoding fails, then call the nvjpegDecodeBatchedInitialize() function again.

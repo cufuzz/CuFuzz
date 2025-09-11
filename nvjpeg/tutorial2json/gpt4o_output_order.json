@@ -1,0 +1,15 @@
+{"tutorial_page": "nvjpeg_doc_c1_1.1.txt", "model_response": {"order": []}}
+{"tutorial_page": "nvjpeg_doc_c1_1.2.txt", "model_response": {"order": []}}
+{"tutorial_page": "nvjpeg_doc_c1_1.3.txt", "model_response": {"order": []}}
+{"tutorial_page": "nvjpeg_doc_c1_1.4.txt", "model_response": {"order": []}}
+{"tutorial_page": "nvjpeg_doc_c2_2.1.txt", "model_response": {"order": [["nvjpegCreateSimple", "nvjpegJpegStateCreate", "nvjpegGetImageInfo", "nvjpegDecode"], ["nvjpegCreateEx", "nvjpegJpegStateCreate", "nvjpegGetImageInfo", "nvjpegDecode"], ["nvjpegBufferPinnedCreate", "nvjpegBufferDeviceCreate", "nvjpegStateAttachPinnedBuffer", "nvjpegStateAttachDeviceBuffer", "nvjpegDecodeParamsCreate", "nvjpegDecodeJpegHost", "nvjpegDecodeJpegTransferToDevice", "nvjpegDecodeJpegDevice"], ["nvjpegDecodeBatchedInitialize", "nvjpegDecodeBatched"]]}}
+{"tutorial_page": "nvjpeg_doc_c2_2.3_2.3.2.txt", "model_response": {"order": []}}
+{"tutorial_page": "nvjpeg_doc_c2_2.3_2.3.4.txt", "model_response": {"order": [["nvjpegDecodeParamsSetOutputFormat", "nvjpegJpegStreamParse", "nvjpegStateAttachPinnedBuffer", "nvjpegDecodeJpegHost", "nvjpegStateAttachDeviceBuffer", "nvjpegDecodeJpegTransferToDevice", "nvjpegDecodeJpegDevice", "cudaDeviceSynchronize"], ["nvjpegStateAttachPinnedBuffer", "nvjpegStateAttachPinnedBuffer", "nvjpegStateAttachDeviceBuffer", "nvjpegStateAttachDeviceBuffer", "nvjpegDecodeParamsSetOutputFormat", "nvjpegJpegStreamParse", "nvjpegJpegStreamGetFrameDimensions", "nvjpegDecodeJpegHost", "nvjpegDecodeJpegTransferToDevice", "nvjpegDecodeJpegDevice", "cudaDeviceSynchronize"]]}}
+{"tutorial_page": "nvjpeg_doc_c2_2.3_2.3.6.txt", "model_response": {"order": []}}
+{"tutorial_page": "nvjpeg_doc_c2_2.3_2.3.7.txt", "model_response": {"order": []}}
+{"tutorial_page": "nvjpeg_doc_c2_2.4.txt", "model_response": {"order": []}}
+{"tutorial_page": "nvjpeg_doc_c3_3.1.txt", "model_response": {"order": [["nvjpegCreateSimple", "nvjpegEncoderStateCreate", "nvjpegEncoderParamsCreate", "nvjpegEncodeImage", "nvjpegEncodeRetrieveBitstream", "cudaStreamSynchronize", "nvjpegEncodeRetrieveBitstream", "cudaStreamSynchronize"]]}}
+{"tutorial_page": "nvjpeg_doc_c3_3.2.txt", "model_response": {"order": []}}
+{"tutorial_page": "nvjpeg_doc_c3_3.3.txt", "model_response": {"order": []}}
+{"tutorial_page": "nvjpeg_doc_c4_4.1.txt", "model_response": {"order": []}}
+{"tutorial_page": "nvjpeg_doc_c4_4.2.txt", "model_response": {"order": [["nvjpegCreateSimple", "nvjpegJpegStreamCreate", "nvjpegJpegStreamParse", "nvjpegDecoderCreate", "nvjpegDecoderStateCreate", "nvjpegDecodeParamsCreate", "nvjpegDecodeParamsSetOutputFormat", "nvjpegDecodeJpeg", "nvjpegJpegStreamGetJpegEncoding", "nvjpegEncoderParamsSetEncoding", "nvjpegEncoderParamsCopyMetadata", "nvjpegEncoderParamsCopyQuantizationTables", "nvjpegEncoderParamsCopyHuffmanTables", "nvjpegJpegStreamGetFrameDimensions", "nvjpegEncodeImage", "nvjpegEncodeRetrieveBitstream", "cudaStreamSynchronize", "nvjpegEncodeRetrieveBitstream"]]}}

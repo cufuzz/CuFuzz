@@ -1,0 +1,57 @@
+3.2. nvJPEG Encoder Type Declarationsï
+
+This section describes the nvJPEG Encoder Type Declarations.
+
+
+3.2.1. nvjpegInputFormat_tï
+
+
+typedef enum {
+    NVJPEG_INPUT_RGB         = 3,
+    NVJPEG_INPUT_BGR         = 4,
+    NVJPEG_INPUT_RGBI        = 5,
+    NVJPEG_INPUT_BGRI        = 6
+} nvjpegInputFormat_t;
+
+
+The nvjpegInputFormat_t enum is used to select the color model and pixel format of the input image. It is used for conversion to YCbCr during encoding.
+
+
+
+
+
+
+
+Member
+Description
+
+
+NVJPEG_INPUT_RGB
+Input image is in RGB color model. Pixel format is RGB.
+
+
+NVJPEG_INPUT_BGR
+Input image is in RGB color model. Pixel format is BGR.
+
+
+NVJPEG_INPUT_RGBI
+Input image is in RGB color model. Pixel format is interleaved RGB.
+
+
+NVJPEG_INPUT_BGRI
+Input image is in RGB color model. Pixel format is interleaved BGR.
+
+
+
+
+
+
+3.2.2. nvjpegEncoderState_tï
+
+The nvjpegEncoderState_t structure stores intermediate buffers and variables used for compression.
+
+
+
+3.2.3. nvjpegEncoderParams_tï
+
+The nvjpegEncoderParams_t structure stores JPEG encode parameters.

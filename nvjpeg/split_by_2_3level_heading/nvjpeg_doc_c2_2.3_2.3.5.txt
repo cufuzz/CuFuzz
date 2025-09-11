@@ -1,0 +1,324 @@
+2.3.5. nvJPEG Decode Parametersï
+
+This category of APIs is used to set the decoding parameters. These APIs should be used with the decode APIs defined in Decode APIâDecoupled Decoding.
+
+
+2.3.5.1. nvjpegDecodeParamsSetOutputFormat()ï
+
+This function is used to set the decode output format. See nvjpegOutputFormat_t described in step 6 of Single Image Decoding. The output parameter of nvjpegOutputFormat_t defaults to NVJPEG_OUTPUT_UNCHANGED if not set using this API.
+Signature:
+
+nvjpegStatus_t nvjpegDecodeParamsSetOutputFormat(
+    nvjpegDecodeParams_t decode_params,
+    nvjpegOutputFormat_t output_format);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+nvjpegDecodeParams_t decode_params
+Input
+Host
+Decode output parameter handle.
+
+
+nvjpegOutputFormat_t output_format
+Input
+Host
+See step 6 of Single Image Decoding.
+
+
+
+Returns:
+nvjpegStatus_t â An error code as specified in nvJPEG API Return Codes.
+
+
+
+2.3.5.2. nvjpegDecodeParamsSetROI()ï
+
+This function enables the region of interest-only (ROI-only) decode. To disable the ROI-only, i.e., to decode the whole image, set:
+
+offset_x = 0,
+offset_y = 0,
+roi_width = -1, and
+roi_height = -1.
+
+
+Note
+ROI decode is disabled by default. It is not supported when the nvJPEG decoder handle is created using NVJPEG_BACKEND_HARDWARE.
+
+The ROI window cannot go out of image bounds. That is:
+
+offset_x cannot be lower than zero, or
+offset_x + roi_width cannot be larger than the JPEG image width.
+
+If the output format is NVJPEG_OUTPUT_YUV or NVJPEG_OUTPUT_UNCHANGED, then the offset_xand offset_y values have to be multiples of the maximum subsampling factor, as defined in the JPEG standard.
+Signature:
+
+nvjpegStatus_t nvjpegDecodeParamsSetROI(
+    nvjpegDecodeParams_t decode_params,
+    int offset_x,
+    int offset_y,
+    int roi_width,
+    int roi_height);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+nvjpegDecodeParams_t decode_params
+Input
+Host
+The decode output parameter handle.
+
+
+int offset_x
+Input
+Host
+Image offset along the horizontal direction relative to the top left corner.
+
+
+int offset_y
+Input
+Host
+Image offset along the vertical direction relative to the top left corner.
+
+
+int roi_width
+Input
+Host
+Image width relative to offset_x.
+
+
+int roi_height
+Input
+Host
+Image height relative to offset_y.
+
+
+
+Returns:
+nvjpegStatus_t â An error code as specified in nvJPEG API Return Codes.
+
+
+
+2.3.5.3. nvjpegDecodeParamsSetAllowCMYK()ï
+
+If enabled, the nvJPEG library assumes that the JPEG with 4 encoded color components is in CMYK colorspace, and enables the conversion to RGB/YUV colorspace. The CMYK-to-RGB conversion is disabled by default. The conversion is based on the subtractive schemeâthis behavior matches OpenCVâs handling of 4-component JPEGs.
+Signature:
+
+nvjpegStatus_t nvjpegDecodeParamsSetAllowCMYK(
+    nvjpegDecodeParams_t decode_params,
+    int allow_cmyk);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+nvjpegDecodeParams_t decode_params
+Input
+Host
+Decode output parameter handle.
+
+
+int allow_cmyk
+Input
+Host
+Enable CMYK to RGB conversion.
+
+
+
+Returns:
+nvjpegStatus_t â An error code as specified in nvJPEG API Return Codes.
+
+
+
+2.3.5.4. nvjpegDecodeParamsSetScaleFactor()ï
+
+Allows the user to scale decode output.
+
+Note
+This feature is currently supported only when nvJPEG decoder handle is created using NVJPEG_BACKEND_HARDWARE.
+
+Signature:
+
+nvjpegStatus_t nvjpegDecodeParamsSetScaleFactor(
+    nvjpegDecodeParams_t decode_params,
+    nvjpegScaleFactor_t scale_factor);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+nvjpegDecodeParams_t decode_params
+Input
+Host
+Decode output parameter handle.
+
+
+nvjpegScaleFactor_t scale_factor
+Input
+Host
+Set the scaling factor for the decode output.
+
+
+
+The scale factor is set to NVJPEG_SCALE_NONE by default. The supported values are listed nvJPEG Scale Factor.
+When setting a scale factor value, the recommended allocation of the destination parameters is as follows:
+
+Use nvjpegGetImageInfo(), or nvjpegJpegStreamGetFrameDimensions() to extract the dimensions of each channel.
+Let height[NVJPEG_MAX_COMPONENT] and width[NVJPEG_MAX_COMPONENT] be 2 arrays which store the height and width. The index to these arrays correspond to the channel id.
+
+For a channel c, the scaled dimensions are calculated as follows:
+
+scaled_height[c] = (height[c] + rounding_factor - 1)/rounding_factor
+scaled_width[c] = (width[c] + rounding_factor - 1)/rounding_factor
+when scale_factor = NVJPEG_SCALE_NONE, rounding_factor = 1
+when scale_factor = NVJPEG_SCALE_1_BY_2, rounding_factor = 2
+when scale_factor = NVJPEG_SCALE_1_BY_4, rounding_factor = 4
+when scale_factor = NVJPEG_SCALE_1_BY_8, rounding_factor = 8
+
+
+
+
+
+
+
+
+
+
+
+
+For the output_format:
+NVJPEG_OUTPUT_Y
+
+destination.pitch[0] should be at least: width[0]
+destination.channel[0] should be at least of size: destination.pitch[0]*height[0]
+
+
+For the output_format
+destination.pitch[c] should be at least:
+destination.channel[c] should be at least of size:
+
+
+NVJPEG_OUTPUT_YUV
+width[c] for c = 0, 1, 2
+destination.pitch[c]*height[c] for c = 0, 1, 2
+
+
+NVJPEG_OUTPUT_RGB and NVJPEG_OUTPUT_BGR
+width[0] for c = 0, 1, 2
+destination.pitch[0]*height[0] for c = 0, 1, 2
+
+
+NVJPEG_OUTPUT_RGBI and NVJPEG_OUTPUT_BGRI
+width[0]*3
+destination.pitch[0]*height[0]
+
+
+NVJPEG_OUTPUT_UNCHANGED
+width[c] for c = [ 0, nComponents - 1 ]
+destination.pitch[c]*height[c] for c = [ 0, nComponents - 1]
+
+
+
+Returns:
+nvjpegStatus_t â An error code as specified in nvJPEG API Return Codes.
+
+
+
+2.3.5.5. nvjpegDecodeParamsSetExifOrientation()ï
+
+This function is used to generate the decoded output based on the exif orientation parameter. When ExifOrientation is enabled, the output buffers should be allocated based on the rotated dimensions. If the orientation is set as NVJPEG_ORIENTATION_UNKNOWN, the library will default to NVJPEG_ORIENTATION_HORIZONTAL.
+ROI Decode and EXIF rotation
+Exif rotation and ROI Decode can be enabled together. The ROI coordinates should be in the rotated space.
+Signature:
+
+nvjpegStatus_t nvjpegDecodeParamsSetExifOrientation(
+    nvjpegDecodeParams_t decode_params,
+    nvjpegExifOrientation_t orientation);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+nvjpegDecodeParams_t decode_params
+Input
+Host
+Decode output parameter handle.
+
+
+nvjpegExifOrientation_t orientation
+Input
+Host
+Set the exif orientation for the decode output.
+
+
+
+Returns:
+nvjpegStatus_t â An error code as specified in nvJPEG API Return Codes.

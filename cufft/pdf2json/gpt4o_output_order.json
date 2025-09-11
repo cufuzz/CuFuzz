@@ -1,0 +1,3 @@
+{"pdf_page": [8, 10], "model_response": {"order": [["cudaMalloc", "cufftPlanMany", "cufftExecC2C", "cudaDeviceSynchronize", "cufftDestroy", "cudaFree"]]}}
+{"pdf_page": [22, 26], "model_response": {"order": [["nvcc", "cufftCreate", "cufftXtSetJITCallback", "cufftMakePlan1d"], ["cudaMemcpyFromSymbol"]]}}
+{"pdf_page": [84, 88], "model_response": {"order": [["cufftCreate", "cufftXtSetGPUs", "cufftMakePlan1d", "cufftXtQueryPlan", "cufftDestroy"]]}}

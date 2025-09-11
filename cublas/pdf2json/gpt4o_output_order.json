@@ -1,0 +1,56 @@
+{"pdf_page": [6, 12], "model_response": {"order": [["cudaMalloc", "cublasCreate", "cublasSetMatrix", "cublasGetMatrix", "cudaFree", "cublasDestroy"], ["cudaMalloc", "cublasCreate", "cublasSetMatrix", "cublasGetMatrix", "cudaFree", "cublasDestroy"]]}}
+{"pdf_page": [14, 18], "model_response": {"order": []}}
+{"pdf_page": [18, 21], "model_response": {"order": [["cublasGemmEx", "cublasSetMathMode"], ["cudaMallocAsync", "cudaFreeAsync", "cublasSetWorkspace"], ["cublasSetMatrix", "cublasIsamax", "cublasSsyr"], ["cublasSetMatrix_64", "cublasIsamax_64", "cublasSsyr_64"], ["cublasCreate", "cublasDestroy"]]}}
+{"pdf_page": [38, 40], "model_response": {"order": []}}
+{"pdf_page": [40, 44], "model_response": {"order": [["cublasScopy", "cublasDcopy", "cublasCcopy", "cublasZcopy"], ["cublasSaxpy", "cublasDaxpy", "cublasCaxpy", "cublasZaxpy"], ["cublasSasum", "cublasDasum", "cublasScasum", "cublasDzasum"], ["cublasIsamin", "cublasIdamin", "cublasIcamin", "cublasIzamin"]]}}
+{"pdf_page": [44, 47], "model_response": {"order": [["cublasSdot", "cublasDdot", "cublasCdotu", "cublasCdotc", "cublasZdotu", "cublasZdotc"], ["cublasSnrm2", "cublasDnrm2", "cublasScnrm2", "cublasDznrm2"], ["cublasSrot", "cublasDrot", "cublasCrot", "cublasCsrot", "cublasZrot", "cublasZdrot"]]}}
+{"pdf_page": [47, 50], "model_response": {"order": [["cublasSrotg", "cublasDrotg", "cublasCrotg", "cublasZrotg"], ["cublasSrotm", "cublasDrotm"], ["cublasSrotmg", "cublasDrotmg"]]}}
+{"pdf_page": [50, 54], "model_response": {"order": [["cublasSgbmv", "cublasDgbmv", "cublasCgbmv", "cublasZgbmv"]]}}
+{"pdf_page": [54, 59], "model_response": {"order": [["cublasSgemv", "cublasDgemv", "cublasCgemv", "cublasZgemv"], ["cublasSger", "cublasDger", "cublasCgeru", "cublasCgerc", "cublasZgeru", "cublasZgerc"], ["cublasSsbmv", "cublasDsbmv"]]}}
+{"pdf_page": [59, 63], "model_response": {"order": [["cublasSspmv", "cublasDspmv"], ["cublasSspr", "cublasDspr"], ["cublasSspr2", "cublasDspr2"]]}}
+{"pdf_page": [63, 66], "model_response": {"order": [["cublasSsymv", "cublasDsymv", "cublasCsymv", "cublasZsymv", "cublasSetAtomicsMode"], ["cublasSsyr", "cublasDsyr", "cublasCsyr", "cublasZsyr"]]}}
+{"pdf_page": [66, 71], "model_response": {"order": [["cublasSsyr2", "cublasDsyr2", "cublasCsyr2", "cublasZsyr2"], ["cublasStbmv", "cublasDtbmv", "cublasCtbmv", "cublasZtbmv"], ["cublasStbsv", "cublasDtbsv", "cublasCtbsv", "cublasZtbsv"]]}}
+{"pdf_page": [71, 76], "model_response": {"order": [["cublasStpmv", "cublasDtpmv", "cublasCtpmv", "cublasZtpmv"], ["cublasStpsv", "cublasDtpsv", "cublasCtpsv", "cublasZtpsv"], ["cublasStrmv", "cublasDtrmv", "cublasCtrmv", "cublasZtrmv"]]}}
+{"pdf_page": [76, 81], "model_response": {"order": [["cublasChbmv", "cublasZhbmv"], ["cublasChpmv", "cublasZhpmv"]]}}
+{"pdf_page": [81, 87], "model_response": {"order": [["cublasCher", "cublasZher"], ["cublasCher2", "cublasZher2"], ["cublasChpr", "cublasZhpr"], ["cublasChpr2", "cublasZhpr2"]]}}
+{"pdf_page": [87, 90], "model_response": {"order": [["cublasSgemvBatched", "cublasDgemvBatched", "cublasCgemvBatched", "cublasZgemvBatched", "cublasHSHgemvBatched", "cublasHSSgemvBatched", "cublasTSTgemvBatched", "cublasTSSgemvBatched"]]}}
+{"pdf_page": [90, 93], "model_response": {"order": [["cublasSgemvStridedBatched", "cublasDgemvStridedBatched", "cublasCgemvStridedBatched", "cublasZgemvStridedBatched", "cublasHSHgemvStridedBatched", "cublasHSSgemvStridedBatched", "cublasTSTgemvStridedBatched", "cublasTSSgemvStridedBatched"]]}}
+{"pdf_page": [94, 98], "model_response": {"order": [["cublasSgemm", "cublasDgemm", "cublasCgemm", "cublasZgemm", "cublasHgemm"], ["cublasCgemm3m", "cublasZgemm3m"]]}}
+{"pdf_page": [98, 104], "model_response": {"order": [["cublasHgemmBatched", "cublasSgemmBatched", "cublasDgemmBatched", "cublasCgemmBatched", "cublasZgemmBatched"], ["cublasHgemmStridedBatched", "cublasSgemmStridedBatched", "cublasDgemmStridedBatched", "cublasCgemmStridedBatched", "cublasCgemm3mStridedBatched", "cublasZgemmStridedBatched"]]}}
+{"pdf_page": [104, 110], "model_response": {"order": [["gemm", "cublas<t>gemmBatched", "cublas<t>gemmGroupedBatched"], ["cublas<t>symm"]]}}
+{"pdf_page": [110, 112], "model_response": {"order": [["cublasCreate", "cublasDestroy"]]}}
+{"pdf_page": [112, 116], "model_response": {"order": [["cublasSsyr2k", "cublasDsyr2k", "cublasCsyr2k", "cublasZsyr2k"], ["cublasSsyrkx", "cublasDsyrkx", "cublasCsyrkx", "cublasZsyrkx"]]}}
+{"pdf_page": [116, 120], "model_response": {"order": [["cublasStrmm", "cublasDtrmm", "cublasCtrmm", "cublasZtrmm"], ["cublasStrsm", "cublasDtrsm", "cublasCtrsm", "cublasZtrsm"]]}}
+{"pdf_page": [120, 124], "model_response": {"order": []}}
+{"pdf_page": [124, 128], "model_response": {"order": [["cublasCreate", "cublasCherk"], ["cublasCreate", "cublasZherk"], ["cublasCreate", "cublasCher2k"], ["cublasCreate", "cublasZher2k"]]}}
+{"pdf_page": [128, 130], "model_response": {"order": [["cublasCherkx", "cublasZherkx", "cublas<t>dgmm"]]}}
+{"pdf_page": [130, 134], "model_response": {"order": [["cublasSgeam", "cublasDgeam", "cublasCgeam", "cublasZgeam"], ["cublasSdgmm", "cublasDdgmm", "cublasCdgmm", "cublasZdgmm"]]}}
+{"pdf_page": [134, 139], "model_response": {"order": [["cublasSgetrfBatched", "cublasDgetrfBatched", "cublasCgetrfBatched", "cublasZgetrfBatched"], ["cublasSgetrsBatched", "cublasDgetrsBatched", "cublasCgetrsBatched", "cublasZgetrsBatched"]]}}
+{"pdf_page": [139, 144], "model_response": {"order": [["cublasDgetrfBatched", "cublasDgetriBatched"]]}}
+{"pdf_page": [144, 147], "model_response": {"order": [["cublasSgelsBatched", "cublasDgelsBatched", "cublasCgelsBatched", "cublasZgelsBatched"]]}}
+{"pdf_page": [147, 151], "model_response": {"order": [["cublasStpttr", "cublasDtpttr", "cublasCtpttr", "cublasZtpttr"], ["cublasStrttp", "cublasDtrttp", "cublasCtrttp", "cublasZtrttp"], ["cublasSgemmEx", "cublasCgemmEx"]]}}
+{"pdf_page": [151, 156], "model_response": {"order": []}}
+{"pdf_page": [156, 161], "model_response": {"order": [["cublasGemmBatchedEx"]]}}
+{"pdf_page": [161, 166], "model_response": {"order": [["cublasGemmStridedBatchedEx", "cublas<t>gemmStridedBatched"]]}}
+{"pdf_page": [166, 170], "model_response": {"order": []}}
+{"pdf_page": [170, 174], "model_response": {"order": []}}
+{"pdf_page": [174, 180], "model_response": {"order": [["cublasCherkEx", "cublasCherk3mEx"], ["cublasCherk3mEx", "cublasNrm2Ex"]]}}
+{"pdf_page": [180, 183], "model_response": {"order": []}}
+{"pdf_page": [183, 187], "model_response": {"order": [["cublasRotEx", "cublas<t>rot"], ["cublasScalEx"]]}}
+{"pdf_page": [197, 200], "model_response": {"order": [["cublasLtMatmulAlgoGetHeuristic", "cublasLtMatmul"]]}}
+{"pdf_page": [231, 234], "model_response": {"order": [["cublasLtCreate", "cudaDeviceSynchronize", "cublasLtDestroy"]]}}
+{"pdf_page": [234, 238], "model_response": {"order": []}}
+{"pdf_page": [237, 243], "model_response": {"order": [["cublasLtLoggerForceDisable", "cublasLtMatmul"], ["cublasLtMatmulAlgoCapGetAttribute", "cublasLtMatmulAlgoCapGetAttribute"]]}}
+{"pdf_page": [247, 252], "model_response": {"order": [["cublasLtMatmulAlgoGetIds", "cublasLtMatmulAlgoInit"], ["cublasLtMatmulDescCreate", "cublasLtMatmulDescInit", "cublasLtMatmulDescDestroy", "cublasLtMatmulDescGetAttribute"]]}}
+{"pdf_page": [252, 255], "model_response": {"order": [["cublasLtMatmulDescSetAttribute", "cublasLtMatmulPreferenceCreate", "cublasLtMatmulPreferenceInit", "cublasLtMatmulPreferenceDestroy", "cublasLtMatmulPreferenceGetAttribute"]]}}
+{"pdf_page": [260, 265], "model_response": {"order": [["cublasLtMatrixTransformDescCreate", "cublasLtMatrixTransformDescInit", "cublasLtMatrixTransformDescDestroy", "cublasLtMatrixTransformDescGetAttribute", "cublasLtMatrixTransformDescSetAttribute"]]}}
+{"pdf_page": [269, 272], "model_response": {"order": [["cublasXtCreate", "cublasXtDestroy", "cublasXtDeviceSelect", "cublasXtSetBlockDim", "cublasXtGetBlockDim"]]}}
+{"pdf_page": [272, 276], "model_response": {"order": [["cudaHostRegister", "cudaHostUnregister", "cudaMallocHost", "cudaHostGetFlags"], ["cublasXtSgemm", "cublasXtDgemm", "cublasXtCgemm", "cublasXtZgemm"]]}}
+{"pdf_page": [276, 282], "model_response": {"order": [["cublasXtSsyrk", "cublasXtDsyrk", "cublasXtCsyrk", "cublasXtZsyrk"], ["cublasXtSsyr2k", "cublasXtDsyr2k", "cublasXtCsyr2k", "cublasXtZsyr2k"]]}}
+{"pdf_page": [281, 285], "model_response": {"order": [["cublasXtSsyr2k", "cublasXtDsyr2k", "cublasXtCsyr2k", "cublasXtZsyr2k"], ["cublasXtSsyrkx", "cublasXtDsyrkx", "cublasXtCsyrkx", "cublasXtZsyrkx"]]}}
+{"pdf_page": [285, 289], "model_response": {"order": [["cublasXtCherk", "cublasXtZherk"], ["cublasXtCher2k", "cublasXtZher2k"], ["cublasXtCherkx", "cublasXtZherkx"]]}}
+{"pdf_page": [289, 293], "model_response": {"order": [["cublasXtStrsm", "cublasXtDtrsm", "cublasXtCtrsm", "cublasXtZtrsm"], ["cublasXtStrmm", "cublasXtDtrmm", "cublasXtCtrmm", "cublasXtZtrmm"]]}}
+{"pdf_page": [293, 295], "model_response": {"order": []}}
+{"pdf_page": [298, 301], "model_response": {"order": [["cublasAlloc", "cudaMalloc"], ["cublasFree", "cudaFree"]]}}
+{"pdf_page": [301, 304], "model_response": {"order": [["cublasSscal", "cublasSscal"], ["cublasInit", "cublasAlloc", "cublasSetMatrix", "cublasGetMatrix", "cublasFree", "cublasShutdown"], ["cublasSscal", "cublasSscal"], ["cublasInit", "cublasAlloc", "cublasSetMatrix", "cublasGetMatrix", "cublasFree", "cublasShutdown"]]}}
+{"pdf_page": [304, 308], "model_response": {"order": [["cublas_init", "cublas_shutdown"], ["cublas_init", "cublas_alloc", "cublas_set_matrix", "cublas_free", "cublas_shutdown", "cublas_get_matrix", "cublas_free", "cublas_shutdown"]]}}

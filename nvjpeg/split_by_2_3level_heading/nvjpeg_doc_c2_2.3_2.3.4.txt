@@ -1,0 +1,385 @@
+2.3.4. Decode APIâDecoupled Decodingï
+
+This set of decoding API works with the bitstream handles, decode parameter handles, pinned and device buffers handles as input, thus decoupling JPEG bitstream parse, buffer management and setting up decoder parameters from the decode process itself.
+Currently only multiphase decoding is available. Multiphase decoupled single image decoding consists of three phases:
+
+Host
+Mixed
+Device
+
+Each of the above decodings is carried on according to its individual semantics. Phases on different images can be carried out with different decoding state handles simultaneously, while sharing of some helper objects is possible. See the details of semantics in the individual phases descriptions.
+Below are a couple of examples of using decoupled API.
+The following snippet explains how to use the API to prefetch the host stage of the processing: first do all of the host work on the host, and then submit the rest of decoding work to the device.
+
+#define BATCH_SIZE 2
+nvjpegHandle_t nvjpeg_handle;
+nvjpegJpegState_t nvjpeg_decoder_state[BATCH_SIZE];
+nvjpegBufferPinned_t nvjpeg_pinned_buffer[BATCH_SIZE];
+nvjpegBufferDevice_t nvjpeg_device_buffer;
+nvjpegJpegStream_t nvjpeg_jpeg_stream[BATCH_SIZE];
+nvjpegDecodeParams_t nvjpeg_decode_params;
+nvjpegJpegDecoder_t nvjpeg_decoder;
+nvjpegBackend_t impl = NVJPEG_BACKEND_DEFAULT;
+
+unsigned char* bitstream[BATCH_SIZE] // pointers jpeg bitstreams
+size_t  length[BATCH_SIZE]; // bitstream sizes
+
+nvjpegImage_t output_images[BATCH_SIZE];
+
+// all the images in the batch will be decoded as RGBI
+nvjpegDecodeParamsSetOutputFormat(nvjpeg_decode_params,NVJPEG_OUTPUT_RGBI );
+
+// call host phase for two bitstreams
+for (int i = 0; i < BATCH_SIZE; i++)
+{
+    nvjpegJpegStreamParse(nvjpeg_handle, bitstream[i], length[i], 0, 0, nvjpeg_jpeg_stream[i]);
+    nvjpegStateAttachPinnedBuffer(nvjpeg_decoder_state[i], nvjpeg_pinned_buffer[i]);
+    nvjpegDecodeJpegHost(nvjpeg_handle, nvjpeg_decoder, nvjpeg_decoder_state[i], nvjpeg_decode_params, nvjpeg_jpeg_stream[i])
+}
+
+for (int i = 0; i < BATCH_SIZE; i++)
+{
+    // same device buffer being used for decoding bitstreams
+    nvjpegStateAttachDeviceBuffer(nvjpeg_decoder_state[i], nvjpeg_device_buffer);
+
+    // cuda stream set to NULL
+    nvjpegDecodeJpegTransferToDevice(nvjpeg_handle, nvjpeg_decoder, nvjpeg_decoder_state[i], nvjpeg_jpeg_stream[i], NULL);
+    // cuda stream set to NULL
+    nvjpegDecodeJpegDevice(nvjpeg_handle, nvjpeg_decoder, nvjpeg_decoder_state[i], &output_images[i], NULL);
+    cudaDeviceSynchronize();
+}
+
+
+The following snippet explains how pinned and device buffers can be shared across two instances of nvJPEG Decoder Handle.
+
+#define BATCH_SIZE 4
+nvjpegHandle_t nvjpeg_handle;
+nvjpegJpegDecoder_t nvjpeg_decoder_impl1;
+nvjpegJpegDecoder_t nvjpeg_decoder_impl2;
+nvjpegJpegState_t nvjpeg_decoder_state_impl1;
+nvjpegJpegState_t nvjpeg_decoder_state_impl2;
+nvjpegBufferPinned_t nvjpeg_pinned_buffer;
+nvjpegBufferDevice_t nvjpeg_device_buffer;
+nvjpegJpegStream_t nvjpeg_jpeg_stream;
+nvjpegDecodeParams_t nvjpeg_decode_params;
+
+unsigned char* bitstream[BATCH_SIZE] // pointers jpeg bitstreams
+size_t  length[BATCH_SIZE]; // bitstream sizes
+
+// populate bitstream and length correctly for this code to work
+nvjpegImage_t output_images[BATCH_SIZE];
+
+// allocate device memory for output images, for this snippet to work
+nvjpegStateAttachPinnedBuffer(nvjpeg_decoder_state_impl1, nvjpeg_pinned_buffer);
+nvjpegStateAttachPinnedBuffer(nvjpeg_decoder_state_impl2, nvjpeg_pinned_buffer);
+nvjpegStateAttachDeviceBuffer(nvjpeg_decoder_state_impl1, nvjpeg_device_buffer);
+nvjpegStateAttachDeviceBuffer(nvjpeg_decoder_state_impl2, nvjpeg_device_buffer);
+
+// all the images in the batch will be decoded as RGBI
+nvjpegDecodeParamsSetOutputFormat(nvjpeg_decode_params,NVJPEG_OUTPUT_RGBI );
+
+for (int i = 0; i < BATCH_SIZE; i++)
+{
+    nvjpegJpegStreamParse(nvjpeg_handle,bitstream[i],length[i],0,0,nvjpeg_jpeg_stream);
+
+    // decide which implementation to use, based on image size
+    unsigned int frame_width;
+    unsigned int frame_height;
+    nvjpegJpegStreamGetFrameDimensions(nvjpeg_jpeg_stream,&frame_width, &frame_height));
+    nvjpegJpegDecoder_t& decoder = (frame_height*frame_width > 1024 * 768 ) ? nvjpeg_decoder_impl2: nvjpeg_decoder_impl1;
+    nvjpegJpegState_t& decoder_state = (frame_height * frame_width > 1024 * 768) ? nvjpeg_decoder_state_impl2:nvjpeg_decoder_state_impl1;
+
+    nvjpegDecodeJpegHost(nvjpeg_handle,decoder,decoder_state,nvjpeg_decode_params,nvjpeg_jpeg_stream);
+
+    // cuda stream set to NULL
+    nvjpegDecodeJpegTransferToDevice(nvjpeg_handle,decoder,decoder_state,nvjpeg_jpeg_stream,NULL);
+
+    // cuda stream set to NULL
+    nvjpegDecodeJpegDevice(nvjpeg_handle,nvjpeg_decoder,decoder_state,&output_images, NULL);
+    cudaDeviceSynchronize();
+}
+
+
+
+
+2.3.4.1. nvjpegDecodeJpegHost()ï
+
+This is the first stage of the decoupled decoding process. It is done entirely on the host, hence it is synchronous with respect to the host.
+If a pinned buffer is attached to the decoder state, then the pinned buffer object will be used to allocate the pinned memory required for the host decoding phase. There wouldnât be allocation if the pinned buffer object already handles the required amount of pinned memory.
+If a pinned buffer object is not attached, then the state will use heap host memory to allocate the memory required for the host processing.
+In this phase, device is not participating. Hence the device selection, device initialization, and device memory initialization can be done later in the decoding process.
+This function works on a parsed stream. The parsed stream handle that is available after calling the nvjpegJpegStreamParse() function should be provided to this function.
+Signature:
+
+nnvjpegStatus_t nvjpegDecodeJpegHost(
+    nvjpegHandle_t handle,
+    nvjpegJpegDecoder_t decoder,
+    nvjpegJpegState_t decoder_state,
+    nvjpegDecodeParams_t decode_params,
+    nvjpegJpegStream_t jpeg_stream);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+nvjpegHandle_t handle
+Input
+Host
+The library handle.
+
+
+nvjpegJpegDecoder_t decoder
+Input
+Host
+The nvJPEG decoder handle.
+
+
+nvjpegJpegState_t decoder_state
+Input
+Host
+The nvJPEG decoder state handle.
+
+
+nvjpegDecodeParams_t decode_params
+Input
+Host
+Handle to decode the output properties.
+
+
+nvjpegJpegStream_t jpeg_stream
+Input
+Host
+Handle to the parsed bitstream data.
+
+
+
+Returns:
+nvjpegStatus_t â An error code as specified in nvJPEG API Return Codes.
+
+
+
+2.3.4.2. nvjpegDecodeJpegTransferToDevice()ï
+
+This phase contains both host and device operations. Hence it is a mix of synchronous and asynchronous operations with respect to the host. All the device operations will be submitted to the provided stream.
+This phase should be called only after the host phase with the same decoder handle, decoder state handle and parsed jpeg stream handle. Device should be initialized and device
+buffer should be attached to decoder_state handle using nvjpegStateAttachDeviceBuffer() prior to calling this API. This device buffer object will be
+resized to the required amount of memory if needed. For the host memory buffer, this phase will use whatever was used in the host phase: either the attached pinned buffer or the stateâs host memory buffer.
+Signature:
+
+nvjpegStatus_t nvjpegDecodeJpegTransferToDevice(
+    nvjpegHandle_t handle,
+    nvjpegJpegDecoder_t decoder,
+    nvjpegJpegState_t decoder_state,
+    nvjpegJpegStream_t jpeg_stream,
+    cudaStream_t stream);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+nvjpegHandle_t handle
+Input
+Host
+The library handle.
+
+
+nvjpegJpegDecoder_t decoder
+Input
+Host
+The nvJPEG decoder handle.
+
+
+nvjpegJpegState_t decoder_state
+Input
+Host
+The nvJPEG decoder state handle.
+
+
+nvjpegJpegStream_t jpeg_stream
+Input
+Host
+Handle to the parsed bitstream data.
+
+
+cudaStream_t stream
+Input
+Host
+The CUDA stream to which all the GPU tasks will be submitted.
+
+
+
+Returns:
+nvjpegStatus_t â An error code as specified in nvJPEG API Return Codes.
+
+
+
+2.3.4.3. nvjpegDecodeJpegDevice()ï
+
+This phase consists of decode operations that take place mainly on the device (no significant host side computation is done). Hence this phase is asynchronous with respect to the host. This phase should be called after nvjpegDecodeJpegTransferToDevice() for a given decoder_state handle and decoder handle.
+In this function call, the host memory buffers are not used, so if the pinned buffer was attached to the state, then it can be reused somewhere else. Note that at this point the Jpeg stream handle is not needed anymore, since parts that are needed for device decoding will be copied to the device memory in the previous phase.
+Signature:
+
+nvjpegStatus_t nvjpegDecodeJpegDevice(
+    nvjpegHandle_t handle,
+    nvjpegJpegDecoder_t decoder,
+    nvjpegJpegState_t decoder_state,
+    nvjpegImage_t *destination,
+    cudaStream_t stream);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+nvjpegHandle_t handle
+Input
+Host
+The library handle.
+
+
+nvjpegJpegDecoder_t decoder
+Input
+Host
+The nvJPEG decoder handle.
+
+
+nvjpegJpegState_t decoder_state
+Input
+Host
+The nvJPEG decoder state handle.
+
+
+nvjpegImage_t *destination
+Input/Output
+Host/Device
+Pointer to a structure that describes the output destination. This structure should be on host, but the pointers in this structure should be pointing to the device memory. See nvJPEG Image for details.
+
+
+cudaStream_t stream
+Input
+Host
+The CUDA stream to which all the GPU tasks will be submitted.
+
+
+
+Returns:
+nvjpegStatus_t â An error code as specified in nvJPEG API Return Codes.
+
+
+
+2.3.4.4. nvjpegDecodeJpeg()ï
+
+This is a single phase API with the flexibility to select nvJPEG back-end when creating an nvjpegJpegDecoder_t object. The user has the option to call this API instead of making three separate calls to nvjpegDecodeJpegHost(), nvjpegDecodeJpegTransferToDevice(), and nvjpegDecodeJpegDevice().
+It is required to atttach the device buffer to the decoder state before calling this API. The pinned buffer is optional. If the pinned buffer is not attached, then heap memory will be used for host processing.
+This function works on a parsed stream. The parsed stream handle that is available after calling the nvjpegJpegStreamParse() function should be provided to this function.
+Signature:
+
+nvjpegStatus_t nvjpegDecodeJpeg(
+    nvjpegHandle_t handle,
+    nvjpegJpegDecoder_t decoder,
+    nvjpegJpegState_t decoder_state,
+    nvjpegJpegStream_t jpeg_bitstream,
+    nvjpegImage_t *destination,
+    nvjpegDecodeParams_t decode_params,
+    cudaStream_t stream);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+nvjpegHandle_t handle
+Input
+Host
+The library handle.
+
+
+nvjpegJpegDecoder_t decoder
+Input
+Host
+The nvJPEG decoder handle.
+
+
+nvjpegJpegState_t decoder_state
+Input
+Host
+The nvJPEG decoder state handle.
+
+
+nvjpegJpegStream_t jpeg_stream
+Input
+Host
+Handle to the parsed bitstream data.
+
+
+nvjpegImage_t *destination
+Input/Output
+Host/Device
+Pointer to a structure that describes the output destination. This structure should be on the host, but the pointers in this structure should be pointing to the device memory. See nvJPEG Image for details.
+
+
+nvjpegDecodeParams_t decode_params
+Input
+Host
+The handle which stores the decode output properties.
+
+
+cudaStream_t stream
+Input
+Host
+The CUDA stream to which all the GPU tasks will be submitted.
+
+
+
+Returns:
+nvjpegStatus_t â An error code as specified in nvJPEG API Return Codes.

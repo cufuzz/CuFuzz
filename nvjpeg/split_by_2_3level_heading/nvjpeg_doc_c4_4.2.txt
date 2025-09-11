@@ -1,0 +1,66 @@
+4.2. JPEG Transcoding Exampleï
+
+See below the example code.
+
+cudaStream_t stream;
+// create library handle
+nvjpegHandle_t handle;
+nvjpegCreateSimple(&handle);
+
+/////////////////////////////////// nvJPEG decoding ////////////////////////////////////////
+// create bitstream object
+nvjpegJpegStream_t jpeg_stream;
+nvjpegJpegStreamCreate(handle, &jpeg_stream);
+
+// parse jpeg stream
+nvjpegJpegStreamParse(handle,
+    data_ptr,
+    data_size,
+    1,  // save metadata in the jpegStream structure
+    0,
+    jpeg_stream);
+
+// create decoder and decoder state
+nvjpegJpegDecoder_t decoder;
+nvjpegJpegState_t decoder_state;
+nvjpegDecoderCreate(handle, NVJPEG_BACKEND_DEFAULT, &decoder);
+nvjpegDecoderStateCreate(handle, decoder, &decoder_state);
+
+// create and set up decoder parameters
+nvjpegDecodeParams_t decode_params;
+nvjpegDecodeParamsCreate(handle, &decode_params);
+nvjpegDecodeParamsSetOutputFormat(decode_params, NVJPEG_OUTPUT_RGBI);
+
+// decode image
+nvjpegImage_t output_image;
+nvjpegDecodeJpeg(handle, decoder, decode_params, jpeg_stream, decoder_state, &output_image, stream);
+
+/////////////////////////////////// nvJPEG Transcode and encode API ///////////////////////////////////
+nvjpegEncoderState_t encoder_state;
+nvjpegEncoderParams_t encode_params;
+
+// get encoding from the jpeg stream and copy it to the encode parameters
+nvjpegJpegEncoding_t jpeg_encoding;
+nvjpegJpegStreamGetJpegEncoding(jpeg_stream, &jpeg_encoding);
+nvjpegEncoderParamsSetEncoding(encode_params, jpeg_encoding);
+
+// copies according data to the encode parameters
+nvjpegEncoderParamsCopyMetadata(encode_params, jpeg_stream, stream);
+nvjpegEncoderParamsCopyQuantizationTables(encode_params, jpeg_stream, stream);
+nvjpegEncoderParamsCopyHuffmanTables(encode_params, jpeg_stream, stream);
+
+// retrieve frame dimensions
+unsigned width, height;
+nvjpegJpegStreamGetFrameDimensions(jpeg_stream, &width, &height);
+
+// encode using encode parameters
+nvjpegEncodeImage(nvjpeg_handle, encoder_state, encode_params, &output_image,
+    input_format, width, height, stream);
+
+// get compressed stream size
+size_t length;
+nvjpegEncodeRetrieveBitstream(nvjpeg_handle, encoder_state, NULL, &length, stream);
+// get stream itself
+cudaStreamSynchronize(stream);
+std::vector<char> jpeg(length);
+nvjpegEncodeRetrieveBitstream(nvjpeg_handle, encoder_state, jpeg.data(), &length, 0);

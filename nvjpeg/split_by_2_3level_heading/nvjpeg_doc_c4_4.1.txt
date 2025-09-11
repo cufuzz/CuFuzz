@@ -1,0 +1,160 @@
+4.1. nvJPEG Transcoder Helper API Referenceï
+
+This section describes the nvJPEG Transcoder helper API.
+
+
+4.1.1. nvjpegEncoderParamsCopyMetadata()ï
+
+Copies the metadata (JFIF, APP, EXT, and COM markers) from the parsed stream.
+Signature:
+
+nvjpegStatus_t nvjpegEncoderParamsCopyMetadata(
+    nvjpegEncoderState_t encoder_state,
+    nvjpegEncoderParams_t encode_params,
+    nvjpegJpegStream_t jpeg_stream,
+    cudaStream_t stream);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+encoder_state
+In/Out
+Host
+Internal structure that stores the temporary buffers required for the compression.
+
+
+encode_params
+Out
+Host
+Encoder parameters that will be used for compression.
+
+
+jpeg_stream
+In
+Host
+Input parsed stream.
+
+
+stream
+In
+Host
+CUDA stream where all the required device operations will be placed.
+
+
+
+
+
+
+4.1.2. nvjpegEncoderParamsCopyQuantizationTables()ï
+
+Copies the quantization tables from the parsed stream.
+Signature:
+
+nvjpegStatus_t nvjpegEncoderParamsCopyQuantizationTables(
+    nvjpegEncoderParams_t encode_params,
+    nvjpegJpegStream_t jpeg_stream,
+    cudaStream_t stream);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+encode_params
+Out
+Host
+Encoder parameters that will be used for compression.
+
+
+jpeg_stream
+In
+Host
+Input parsed stream.
+
+
+stream
+In
+Host
+CUDA stream where all the required device operations will be placed.
+
+
+
+
+
+
+4.1.3. nvjpegEncoderParamsCopyHuffmanTables() [Deprecated]ï
+
+nvjpegEncoderParamsCopyHuffmanTables() is now deprecated. Due to precision differences in the JPEG encode/decode process, the input huffman tables may no longer be valid for the image being encoded and may result in corrupt bitstream.
+Signature:
+
+nvjpegStatus_t nvjpegEncoderParamsCopyHuffmanTables(
+    nvjpegEncoderState_t encoder_state,
+    nvjpegEncoderParams_t encode_params,
+    nvjpegJpegStream_t jpeg_stream,
+    cudaStream_t stream);
+
+
+Parameters:
+
+
+
+
+
+
+
+
+
+Parameter
+Input / Output
+Memory
+Description
+
+
+encoder_state
+In/Out
+Host
+Internal structure that stores the temporary buffers required for the compression.
+
+
+encode_params
+Out
+Host
+Encoder parameters that will be used for compression.
+
+
+jpeg_stream
+In
+Host
+Input parsed stream.
+
+
+stream
+In
+Host
+CUDA stream where all the required device operations will be placed.

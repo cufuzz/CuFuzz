@@ -1,0 +1,21 @@
+2025-08-14 15:14:43,183 - INFO - 
+[*] the sample path is: ['cudaFree', 'cusolverDnDestroy', 'cudaStreamDestroy', 'cudaDeviceReset']
+2025-08-14 15:14:47,261 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 15:14:47,273 - INFO -    the save file is: ./cusolver/harness/20250814_151447/20250814_151447.cu
+2025-08-14 15:14:47,273 - INFO -    the compile is: /usr/local/cuda/bin/nvcc ./cusolver/harness/20250814_151447/20250814_151447.cu -o ./cusolver/harness/20250814_151447/20250814_151447 -lcusolver
+2025-08-14 15:14:50,443 - INFO -    :) Great! this harness (init) compile pass
+
+2025-08-14 15:14:53,017 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 15:14:54,557 - INFO -        [+]Next! this harness (+ separate) compile pass
+
+2025-08-14 15:14:56,017 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 15:14:57,670 - INFO -            [+]Next! this harness (+ separate + wrap) compile pass
+
+2025-08-14 15:14:57,670 - INFO -     ******  test the harness current once ********** 
+
+2025-08-14 15:14:59,688 - INFO - Started fuzzing with command: ['/home/fanximing/cuda-graph-code/cusolver/fuzz_output_threads/20250814_151447_sep_wrap_round1/20250814_151447_sep_wrap']
+2025-08-14 15:16:59,710 - INFO - pre fuzz done round 1:/home/fanximing/cuda-graph-code/cusolver/harness/20250814_151447/20250814_151447_sep_wrap, result: FResult.TIMED_OUT
+2025-08-14 15:16:59,711 - INFO -     ******  test the 5 harnesses sampled ********** 
+
+2025-08-14 15:17:01,725 - INFO - Started fuzzing with command: ['/home/fanximing/cuda-graph-code/cusolver/fuzz_output_threads/20250814_151447_sep_wrap_round2/20250814_151447_sep_wrap']
+2025-08-14 15:17:19,134 - INFO - pre fuzz done round 2:/home/fanximing/cuda-graph-code/cusolver/harness/20250814_151447/20250814_151447_sep_wrap, result: FResult.ERROR

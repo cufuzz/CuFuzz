@@ -1,0 +1,1 @@
+{"pdf_page": [307, 310], "model_response": {"order": [["cusparseCreateMatDescr", "cusparseSetMatIndexBase", "cusparseSetMatType", "cusolverSpCreateCsrqrInfo", "cusolverSpXcsrqrAnalysisBatched", "cusolverSpDcsrqrBufferInfoBatched", "cudaMalloc", "cusolverSpDcsrqrsvBatched", "cusolverSpDestroyCsrqrInfo"]]}}

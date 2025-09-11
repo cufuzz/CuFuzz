@@ -1,0 +1,84 @@
+nvJPEG
+A GPU accelerated JPEG codec library.
+
+
+1. Introductionï
+
+
+
+1.1. nvJPEG Decoderï
+
+The nvJPEG library provides high-performance, GPU accelerated JPEG decoding functionality for image formats commonly used in deep learning and hyperscale multimedia applications. The library offers single and batched JPEG decoding capabilities which efficiently utilize the available GPU resources for optimum performance; and the flexibility for users to manage the memory allocation needed for decoding.
+The nvJPEG library enables the following functions: use the JPEG image data stream as input; retrieve the width and height of the image from the data stream, and use this retrieved information to manage the GPU memory allocation and the decoding. A dedicated API is provided for retrieving the image information from the raw JPEG image data stream.
+
+Note
+Throughout this document, the terms âCPUâ and âHostâ are used synonymously. Similarly, the terms âGPUâ and âDeviceâ are synonymous.
+
+The nvJPEG library supports the following:
+JPEG options:
+
+Baseline and Progressive JPEG decoding/encoding
+8 bits per pixel
+Huffman bitstream decoding
+Upto 4 channel JPEG bitstreams
+8- and 16-bit quantization tables
+
+The following chroma subsampling for the 3 color channels Y, Cb, Cr (Y, U, V):
+
+4:4:4
+4:2:2
+4:2:0
+4:4:0
+4:1:1
+4:1:0
+
+
+
+Features:
+
+Hybrid decoding using both the CPU (i.e., host) and the GPU (i.e., device).
+Hardware acceleration for baseline JPEG decode on Hardware Acceleration.
+Input to the library is in the host memory, and the output is in the GPU memory.
+Single image and batched image decoding.
+Single phase and multiple phases decoding.
+Color space conversion.
+User-provided memory manager for the device and pinned host memory allocations.
+
+
+
+
+1.2. nvJPEG Encoderï
+
+The encoding functions of the nvJPEG library perform GPU-accelerated compression of userâs image data to the JPEG bitstream. User can provide input data in a number of formats and colorspaces, and control the encoding process with parameters. Encoding functionality will allocate temporary buffers using user-provided memory allocator.
+Before calling the encoding functions the user should perform a few prerequisite steps using the helper functions described in nvJPEG Encoder Helper API Reference.
+
+
+
+1.3. Thread Safetyï
+
+Not all nvJPEG types are thread safe.
+When using decoder APIs across multiple threads, the following decoder types should be instantiated separately for each thread: nvJPEG Bitstream Handle, nvJPEG Opaque JPEG Decoding State Handle, nvJPEG Decode Device Buffer Handle, nvJPEG Decode Pinned Buffer Handle
+When using encoder APIs across multiple threads, nvjpegEncoderState_t should be instantiated separately for each thread.
+For user-provided allocators (inputs to nvjpegCreateEx()), the user needs to ensure thread safety.
+
+
+
+1.4. Multi-GPU supportï
+
+The nvJPEG states and handles are bound to the device that was set as current during their creation. Using these states and handles with another device set as current is undefined. The user is responsible of keeping track of the current device.
+
+
+
+1.5. Hardware Accelerationï
+
+Hardware accelerated JPEG decode is available on the following GPUs architecures -
+
+Ampere (A100, A30)
+Hopper
+Ada
+Blackwell
+
+Platforms which support hardware accelerated JPEG decode:
+
+Windows
+Linux (x86_64, PowerPC, ARM64)

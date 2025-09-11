@@ -1,0 +1,6 @@
+1.3. Thread Safetyï
+
+Not all nvJPEG types are thread safe.
+When using decoder APIs across multiple threads, the following decoder types should be instantiated separately for each thread: nvJPEG Bitstream Handle, nvJPEG Opaque JPEG Decoding State Handle, nvJPEG Decode Device Buffer Handle, nvJPEG Decode Pinned Buffer Handle
+When using encoder APIs across multiple threads, nvjpegEncoderState_t should be instantiated separately for each thread.
+For user-provided allocators (inputs to nvjpegCreateEx()), the user needs to ensure thread safety.

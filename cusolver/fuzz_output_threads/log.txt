@@ -1,0 +1,6 @@
+[INFO] Reading harness list file
+[INFO] Done
+[INFO] Initializing ... the exec list to be test is ['/home/fanximing/cuda-graph-code/cusolver/harness/20250814_151447/20250814_151447_sep_wrap']
+[INFO] Reading harness list file
+[INFO] Done
+[INFO] Initializing ... the exec list to be test is ['/home/fanximing/cuda-graph-code/cusolver/harness/20250814_151447/20250814_151447_sep_wrap']
