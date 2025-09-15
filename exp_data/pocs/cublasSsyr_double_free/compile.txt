@@ -1,0 +1,1 @@
+nvcc -g -G 20250704_170646_sep_wrap.cu  -o db_wrap -lcublas

@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <cuda.h>
+#include <nvjpeg.h>
+
+void UT(const unsigned char* jpegData, size_t jpegSize, nvjpegHandle_t nvjpegHandle, nvjpegJpegState_t nvjpegState, cudaStream_t stream) {
+    if (jpegData == NULL || jpegSize == 0) return;
+
+    nvjpegJpegStream_t jpegStream;
+    nvjpegStatus_t status;
+    unsigned int width, height;
+    nvjpegChromaSubsampling_t subsampling;
+
+    // Create a JPEG stream
+    if (nvjpegJpegStreamCreate(nvjpegHandle, &jpegStream) != NVJPEG_STATUS_SUCCESS) {
+        return;
+    }
+
+    // Parse the JPEG stream
+    status = nvjpegJpegStreamParse(nvjpegHandle, jpegData, jpegSize, 0, 0, jpegStream);
+    if (status != NVJPEG_STATUS_SUCCESS) {
+        nvjpegJpegStreamDestroy(jpegStream);
+        return;
+    }
+
+    // Get frame dimensions
+    status = nvjpegJpegStreamGetFrameDimensions(jpegStream, &width, &height);
+    if (status != NVJPEG_STATUS_SUCCESS) {
+        nvjpegJpegStreamDestroy(jpegStream);
+        return;
+    }
+
+    // Get chroma subsampling
+    status = nvjpegJpegStreamGetChromaSubsampling(jpegStream, &subsampling);
+    if (status != NVJPEG_STATUS_SUCCESS) {
+        nvjpegJpegStreamDestroy(jpegStream);
+        return;
+    }
+
+    // Clean up
+    nvjpegJpegStreamDestroy(jpegStream);
+}
+
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        return EXIT_FAILURE;
+    }
+
+    const char* filename = argv[1];
+    FILE* file = fopen(filename, "rb");
+    if (!file) {
+        return EXIT_FAILURE;
+    }
+
+    fseek(file, 0, SEEK_END);
+    long fileSize = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    unsigned char* jpgData = (unsigned char*)malloc(fileSize);
+    if (!jpgData) {
+        fclose(file);
+        return EXIT_FAILURE;
+    }
+
+    size_t bytesRead = fread(jpgData, 1, fileSize, file);
+    fclose(file);
+    if (bytesRead != fileSize) {
+        free(jpgData);
+        return EXIT_FAILURE;
+    }
+
+    nvjpegHandle_t nvjpegHandle;
+    nvjpegJpegState_t nvjpegState;
+    cudaStream_t stream;
+
+    // Initialize NVJPEG
+    if (nvjpegCreate(NVJPEG_BACKEND_DEFAULT, NULL, &nvjpegHandle) != NVJPEG_STATUS_SUCCESS) {
+        free(jpgData);
+        return EXIT_FAILURE;
+    }
+    if (nvjpegJpegStateCreate(nvjpegHandle, &nvjpegState) != NVJPEG_STATUS_SUCCESS) {
+        nvjpegDestroy(nvjpegHandle);
+        free(jpgData);
+        return EXIT_FAILURE;
+    }
+    if (cudaStreamCreate(&stream) != cudaSuccess) {
+        nvjpegJpegStateDestroy(nvjpegState);
+        nvjpegDestroy(nvjpegHandle);
+        free(jpgData);
+        return EXIT_FAILURE;
+    }
+
+    // Call UT function
+    UT(jpgData, fileSize, nvjpegHandle, nvjpegState, stream);
+
+    // Cleanup
+    free(jpgData);
+    cudaStreamDestroy(stream);
+    nvjpegJpegStateDestroy(nvjpegState);
+    nvjpegDestroy(nvjpegHandle);
+
+    return EXIT_SUCCESS;
+}

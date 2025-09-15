@@ -18,8 +18,6 @@ from zhipuai import ZhipuAI
 from pdf2text import *
 from several_prompt import *
 
-####   第一版py提取api调用关系，没有提取api调用顺序。而且大量的costomer函数调用cuda api，这种意义不大。
-####   因此第二版py修改提示词只提取cuda api的调用，以及一段代码中的api 出现顺序。
 
 
 the_cublas_split_pages_list = [ [7, 12],[15, 18],[19, 21],[25, 27],[28, 30],[31, 34],[35, 38],[39, 40],[41, 44],[45, 47],[48, 50],[51, 54],
@@ -67,7 +65,7 @@ def gpt_output(sys_prompt:str, usr_prompt:str, start_page, end_page, sav_path):
     print(response_content)
 
     try:
-        # 移除字符串中的多余字符，以便正确解析JSON
+        
         json_start = response_content.index('```json') + len('```json')
         json_end = response_content.index('```', json_start)
         json_content = response_content[json_start:json_end].strip()
@@ -137,7 +135,7 @@ def gpt4o_nvjpeg_output(input_file, sav_path):
     print(response_content)
 
     try:
-        # 移除字符串中的多余字符，以便正确解析JSON
+       
         json_start = response_content.index('```json') + len('```json')
         json_end = response_content.index('```', json_start)
         json_content = response_content[json_start:json_end].strip()
@@ -179,7 +177,7 @@ def gain_nvjpeg_api_sig_dict_by_gpt4o(input_file) -> dict:
     response_content = completion.choices[0].message.content
 
     try:
-        # 移除字符串中的多余字符，以便正确解析JSON
+        
         json_start = response_content.index('```json') + len('```json')
         json_end = response_content.index('```', json_start)
         json_content = response_content[json_start:json_end].strip()
@@ -231,7 +229,7 @@ def gain_cublas_cunpp_api_sig_dict_by_gpt4o(input_file) -> dict:
     response_content = completion.choices[0].message.content
 
     try:
-        # 移除字符串中的多余字符，以便正确解析JSON
+       
         json_start = response_content.index('```json') + len('```json')
         json_end = response_content.index('```', json_start)
         json_content = response_content[json_start:json_end].strip()
@@ -276,9 +274,9 @@ def save_cunpp_api_sig_dict():
         for line in file:
             count += 1
             try:
-                # 尝试解析每一行为JSON对象
+               
                 data = json.loads(line)
-                # 打印读取到的数据
+                
                 
                 for item in data['model_response']:
                     if ('cu' in item['head']) or ('CU' in item['head']) or ('npp' in item['head']) or ('NPP' in item['head']):
@@ -287,7 +285,7 @@ def save_cunpp_api_sig_dict():
                         the_api_names.add(item['tail'])
 
             except json.JSONDecodeError as e:
-                # 如果解析出错，打印错误信息
+                
                 print(f"Error parsing JSON line: {e}")
     print(len(the_api_names))
 
@@ -296,16 +294,16 @@ def save_cunpp_api_sig_dict():
         for line in file:
             count += 1
             try:
-                # 尝试解析每一行为JSON对象
+                
                 data = json.loads(line)
-                # 打印读取到的数据
+                
                 for item in data['model_response']['order']:
                     for item1 in item:
                         if ('cu' in item1) or ('CU' in item1) or ('npp' in item1) or ('NPP' in item1):
                             the_api_names.add(item1)
 
             except json.JSONDecodeError as e:
-                # 如果解析出错，打印错误信息
+                
                 print(f"Error parsing JSON line: {e}")
     print(len(the_api_names))
 
@@ -358,7 +356,7 @@ def glm_output(sys_prompt:str, usr_prompt:str, start_page, end_page, sav_path):
     # final_output = ""
 
     response = client.chat.completions.create(
-        model="glm-4",  # 请填写要调用的模型名称
+        model="glm-4",  
         messages=[
             {"role": "system", "content": sys_prompt},
             {"role": "user", "content": usr_prompt},
