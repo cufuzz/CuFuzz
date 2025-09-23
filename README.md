@@ -15,9 +15,13 @@ During the fuzzing process, the results will be printed on the terminal and save
 
 # Structure
 gen_harness.py : It is mean stream and fuzzing entry.
+
 gen_graph_from_cuda_sample.py and gen_graph_from_cuda_tutorial-2.py : These two are respectively used to extract knowledge graphs from official documents. I have already extracted the knowledge graphs and can use them directly
+
 Folder c_factors : It is a pre compiled c-based mutation operator, which has been compiled and can be used directly.
+
 Folder anlysis: Store experimental data analysis code.
+
 Folder cublas et.al. : Store the fuzz results of each library, as well as their respective knowledge graphs, etc
 
 # Experiment data
