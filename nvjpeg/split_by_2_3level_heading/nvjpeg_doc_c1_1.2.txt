@@ -1,4 +1,0 @@
-1.2. nvJPEG Encoderï
-
-The encoding functions of the nvJPEG library perform GPU-accelerated compression of userâs image data to the JPEG bitstream. User can provide input data in a number of formats and colorspaces, and control the encoding process with parameters. Encoding functionality will allocate temporary buffers using user-provided memory allocator.
-Before calling the encoding functions the user should perform a few prerequisite steps using the helper functions described in nvJPEG Encoder Helper API Reference.

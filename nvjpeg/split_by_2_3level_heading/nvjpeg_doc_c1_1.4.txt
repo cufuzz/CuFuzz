@@ -1,3 +1,0 @@
-1.4. Multi-GPU supportï
-
-The nvJPEG states and handles are bound to the device that was set as current during their creation. Using these states and handles with another device set as current is undefined. The user is responsible of keeping track of the current device.

@@ -1,3 +1,0 @@
-2.3.8. Reference Documentsï
-
-Refer to the JPEG standard: https://jpeg.org/jpeg/
