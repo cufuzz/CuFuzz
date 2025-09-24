@@ -4,7 +4,16 @@ Currently supports cuRT(Runtime), cuBlas, cuFFT, cuNPP, cuSOLVER, cuSPARSE, nvJP
 
 # Environment
 Refer to the requirements and follow the Python packages inside. It is recommended to use conda and Python>=3.10
+
 You must have a AFL, because the mutation requires the use of the .h file from it.
+Provide the absolute path of AFL (please download one in advance) and compile the mutation operator.
+```
+cd c_factors
+chmod 777 build.sh
+./build.sh /absolute/path/for/AFL
+```
+if you compile mu2.o and test binary 111, it's ok.
+
 
 # Quick start
 Configure in config.yaml, such as selecting the target library to test. 

@@ -4,9 +4,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "/home/fanximing/AFL/types.h"
-#include "/home/fanximing/AFL/config.h"
-#include "/home/fanximing/AFL/debug.h"
+#include "AFL/types.h"
+#include "AFL/config.h"
+#include "AFL/debug.h"
 
 
 typedef int8_t   s8;
