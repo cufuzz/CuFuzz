@@ -19,3 +19,97 @@
 
 2025-08-14 15:17:01,725 - INFO - Started fuzzing with command: ['/home/fanximing/cuda-graph-code/cusolver/fuzz_output_threads/20250814_151447_sep_wrap_round2/20250814_151447_sep_wrap']
 2025-08-14 15:17:19,134 - INFO - pre fuzz done round 2:/home/fanximing/cuda-graph-code/cusolver/harness/20250814_151447/20250814_151447_sep_wrap, result: FResult.ERROR
+2025-09-25 22:23:13,131 - INFO - 
+[*] the sample path is: ['cusolverMgPotrf_bufferSize', 'cusolverMgPotrs_bufferSize']
+2025-09-25 22:23:24,706 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 22:23:24,711 - INFO -    the save file is: ./cusolver/harness/20250925_222324/20250925_222324.cu
+2025-09-25 22:23:24,711 - INFO -    the compile is: /usr/local/cuda/bin/nvcc ./cusolver/harness/20250925_222324/20250925_222324.cu -o ./cusolver/harness/20250925_222324/20250925_222324 -lcusolverMg
+2025-09-25 22:23:32,650 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 22:23:34,425 - INFO -    :) Great! this harness (init) compile pass
+
+2025-09-25 22:23:38,917 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 22:23:39,766 - INFO -        [+]Next! this harness (+ separate) compile pass
+
+2025-09-25 22:23:41,302 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 22:23:41,359 - WARNING -            [-]Next! this harness (+ separate + wrap) compile wrong
+
+2025-09-25 22:23:41,359 - INFO - 
+[*] the sample path is: ['cusolverMgPotrf_bufferSize', 'cusolverMgPotrs_bufferSize']
+2025-09-25 22:23:51,725 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 22:23:51,726 - INFO -    the save file is: ./cusolver/harness/20250925_222351/20250925_222351.cu
+2025-09-25 22:23:51,726 - INFO -    the compile is: /usr/local/cuda/bin/nvcc ./cusolver/harness/20250925_222351/20250925_222351.cu -o ./cusolver/harness/20250925_222351/20250925_222351 -lcusolverMg -lcublas
+2025-09-25 22:23:57,217 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 22:23:58,941 - INFO -    :) Great! this harness (init) compile pass
+
+2025-09-25 22:24:05,301 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 22:24:06,169 - INFO -        [+]Next! this harness (+ separate) compile pass
+
+2025-09-25 22:24:07,922 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 22:24:07,974 - WARNING -            [-]Next! this harness (+ separate + wrap) compile wrong
+
+2025-09-25 22:24:07,975 - INFO - 
+[*] the sample path is: ['cusolverMgPotrf_bufferSize', 'cusolverMgPotrs_bufferSize']
+2025-09-25 23:14:25,791 - INFO - 
+[*] the sample path is: ['cudaMemset', 'cudaSetDevice', 'cudaDeviceEnablePeerAccess']
+2025-09-25 23:14:30,873 - INFO - Retrying request to /chat/completions in 0.422333 seconds
+2025-09-25 23:14:35,158 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 23:14:35,162 - INFO -    the save file is: ./cusolver/harness/20250925_231435/20250925_231435.cu
+2025-09-25 23:14:35,162 - INFO -    the compile is: /usr/local/cuda/bin/nvcc ./cusolver/harness/20250925_231435/20250925_231435.cu -o ./cusolver/harness/20250925_231435/20250925_231435 -lcusolver
+2025-09-25 23:14:35,970 - INFO -    :) Great! this harness (init) compile pass
+
+2025-09-25 23:14:38,825 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 23:14:39,233 - INFO -        [+]Next! this harness (+ separate) compile pass
+
+2025-09-25 23:14:41,034 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 23:14:41,439 - INFO -            [+]Next! this harness (+ separate + wrap) compile pass
+
+2025-09-25 23:14:41,439 - INFO -     ******  test the harness current once ********** 
+
+2025-09-25 23:14:43,487 - INFO - Started fuzzing with command: ['/home/fanximing/CuFuzz/cusolver/fuzz_output_threads/20250925_231435_sep_wrap_round1/20250925_231435_sep_wrap']
+2025-09-25 23:14:44,475 - INFO - pre fuzz done round 1:/home/fanximing/CuFuzz/cusolver/harness/20250925_231435/20250925_231435_sep_wrap, result: FResult.SAFE
+2025-09-25 23:14:44,476 - INFO -     ******  test the 5 harnesses sampled ********** 
+
+2025-09-25 23:14:45,517 - INFO - Started fuzzing with command: ['/home/fanximing/CuFuzz/cusolver/fuzz_output_threads/20250925_231435_sep_wrap_round2/20250925_231435_sep_wrap']
+2025-09-25 23:14:46,402 - INFO - pre fuzz done round 2:/home/fanximing/CuFuzz/cusolver/harness/20250925_231435/20250925_231435_sep_wrap, result: FResult.SAFE
+2025-09-25 23:14:46,403 - INFO - 
+[*] the sample path is: ['cudaMemset', 'cudaDeviceSynchronize', 'cusolverMgPotrf']
+2025-09-25 23:14:51,013 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 23:14:51,014 - INFO -    the save file is: ./cusolver/harness/20250925_231451/20250925_231451.cu
+2025-09-25 23:14:51,014 - INFO -    the compile is: /usr/local/cuda/bin/nvcc -o ./cusolver/harness/20250925_231451/20250925_231451 ./cusolver/harness/20250925_231451/20250925_231451.cu -lcusolver
+2025-09-25 23:14:55,498 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 23:15:00,178 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 23:15:00,973 - INFO -    :) Great! this harness (init) compile pass
+
+2025-09-25 23:15:04,111 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 23:15:04,509 - INFO -        [+]Next! this harness (+ separate) compile pass
+
+2025-09-25 23:15:06,394 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 23:15:06,813 - INFO -            [+]Next! this harness (+ separate + wrap) compile pass
+
+2025-09-25 23:15:06,813 - INFO -     ******  test the harness current once ********** 
+
+2025-09-25 23:15:07,853 - INFO - Started fuzzing with command: ['/home/fanximing/CuFuzz/cusolver/fuzz_output_threads/20250925_231451_sep_wrap_round1/20250925_231451_sep_wrap']
+2025-09-25 23:15:08,564 - INFO - pre fuzz done round 1:/home/fanximing/CuFuzz/cusolver/harness/20250925_231451/20250925_231451_sep_wrap, result: FResult.SAFE
+2025-09-25 23:16:08,970 - INFO - 
+[*] the sample path is: ['cudaMemset', 'cudaMemcpy', 'cudaFree']
+2025-09-25 23:16:13,791 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 23:16:13,795 - INFO -    the save file is: ./curand/harness/20250925_231613/20250925_231613.cu
+2025-09-25 23:16:13,795 - INFO -    the compile is: /usr/local/cuda/bin/nvcc ./curand/harness/20250925_231613/20250925_231613.cu -o ./curand/harness/20250925_231613/20250925_231613 -lcurand
+2025-09-25 23:16:14,593 - INFO -    :) Great! this harness (init) compile pass
+
+2025-09-25 23:16:17,614 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 23:16:18,015 - INFO -        [+]Next! this harness (+ separate) compile pass
+
+2025-09-25 23:16:19,327 - INFO - HTTP Request: POST https://api.gpt.ge/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-25 23:16:19,727 - INFO -            [+]Next! this harness (+ separate + wrap) compile pass
+
+2025-09-25 23:16:19,728 - INFO -     ******  test the harness current once ********** 
+
+2025-09-25 23:16:21,771 - INFO - Started fuzzing with command: ['/home/fanximing/CuFuzz/curand/fuzz_output_threads/20250925_231613_sep_wrap_round1/20250925_231613_sep_wrap']
+2025-09-25 23:16:22,716 - INFO - pre fuzz done round 1:/home/fanximing/CuFuzz/curand/harness/20250925_231613/20250925_231613_sep_wrap, result: FResult.SAFE
+2025-09-25 23:16:22,716 - INFO -     ******  test the 5 harnesses sampled ********** 
+
+2025-09-25 23:16:23,758 - INFO - Started fuzzing with command: ['/home/fanximing/CuFuzz/curand/fuzz_output_threads/20250925_231613_sep_wrap_round2/20250925_231613_sep_wrap']
+2025-09-25 23:16:24,636 - INFO - pre fuzz done round 2:/home/fanximing/CuFuzz/curand/harness/20250925_231613/20250925_231613_sep_wrap, result: FResult.SAFE
+2025-09-25 23:16:24,636 - INFO - 
+[*] the sample path is: ['cudaMemset', 'cudaMalloc', 'cudaMemcpy2D']

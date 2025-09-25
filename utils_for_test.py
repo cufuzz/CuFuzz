@@ -4,6 +4,7 @@ import re
 from pdf2text import *
 import shlex
 import os
+import yaml
 from transformers import  AutoTokenizer
 from enum import Enum
 class FResult(Enum):
@@ -40,6 +41,10 @@ def save_harness(time_flame:str, the_code:str):
         file.close()
 
 def compile_code(compilation, suffix= None):
+
+    with open('./config.yaml', 'r', encoding='utf-8') as f:
+        config = yaml.safe_load(f)
+
     compile_command = shlex.split(compilation)
     insert_idx = 0
     for i in range(len(compile_command)):
@@ -57,6 +62,7 @@ def compile_code(compilation, suffix= None):
                     compile_command[i] = compile_command[i] + suffix
     if (insert_idx):
         compile_command.insert(insert_idx, f"{os.getcwd()}/c_factors/mu2.o")
+        compile_command.insert(insert_idx, f"-I{config['AFL_PATH']}/")
 
     try:
         result = subprocess.run(compile_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,

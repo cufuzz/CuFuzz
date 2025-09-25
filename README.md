@@ -12,11 +12,12 @@ cd c_factors
 chmod 777 build.sh
 ./build.sh /absolute/path/for/AFL
 ```
-if you compile mu2.o and test binary 111, it's ok.
+if you compile out mu2.o and test binary 111, it's ok.
 
 
 # Quick start
 Configure in config.yaml, such as selecting the target library to test. 
+you must change the config["AFL_PATH"], config["llm"]["base_url"], config["llm"]["api_key"]
 Then run:
 ```
 python gen_harness.py

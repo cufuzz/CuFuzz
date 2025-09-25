@@ -1,7 +1,9 @@
 # which lib you want to fuzz
-lib: 'cusolver'             # choose one lib you want to test from ['rt', 'nvjpeg', 'cublas', 'cunpp', 'cufft', 'curand', 'cusolver', 'cusparse']
+lib: 'curand'             # choose one lib you want to test from ['rt', 'nvjpeg', 'cublas', 'cunpp', 'cufft', 'curand', 'cusolver', 'cusparse']
 
 cuda_v: 'cuda-13.0'
+
+AFL_PATH: '/home/fanximing'                  #  change it with your AFL root path.
 
 input_json:
   rt: ['./rt-lib/cudasample2json/gpt4o_output_calls_only_cu.json', 
@@ -57,8 +59,8 @@ harness:
 
 # llm config
 llm:
-  base_url: "https://api.gpt.ge/v1/"
-  api-key: 'sk-WXtqOuBZPY096KTcDdE866275274464d88943d068aA7Ff5d'
+  base_url: "https://api.gpt.ge/v1/"                                     ##  change it with your ai-api-url
+  api-key: 'sk-WXtqOuBZPY096KTcDdE866275274464d88943d068aA'              ##  this key can't be used, change it with your api-key 
 
 # fuzz_one confg
 fuzz_one:

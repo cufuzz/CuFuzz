@@ -18,7 +18,7 @@ from several_prompt import *
 from pdf2text import *
 
 
-client = ZhipuAI(api_key="6c88acb666fbc9cab823761a9aab62f8.vUJGUaydVzyBwJEG")  # 请填写自己的APIKey
+client = ZhipuAI(api_key="6c88acb666fbc9cab823761a9aab62f")  # 请填写自己的APIKey
 with open('./config.yaml', 'r', encoding='utf-8') as f:
     config = yaml.safe_load(f)
 
