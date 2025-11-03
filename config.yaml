@@ -3,7 +3,8 @@ lib: 'curand'             # choose one lib you want to test from ['rt', 'nvjpeg'
 
 cuda_v: 'cuda-13.0'
 
-AFL_PATH: '/home/fanximing'                  #  change it with your AFL root path.
+#  change it with your AFL root path.
+AFL_PATH: '/home/fanximing'                  
 
 input_json:
   rt: ['./rt-lib/cudasample2json/gpt4o_output_calls_only_cu.json', 

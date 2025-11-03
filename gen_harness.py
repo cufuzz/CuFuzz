@@ -144,9 +144,9 @@ class Chatgpt:
 
         try:
             if mode ==  'rt':
-                os.mkdir(f'./rt-lib/harness/{timestemp}')
+                os.makedirs(f'./rt-lib/harness/{timestemp}')
             elif mode == 'nvjpeg':
-                os.mkdir(f'./nvjpeg/harness/{timestemp}')
+                os.makedirs(f'./nvjpeg/harness/{timestemp}')
             elif mode == 'cublas':
                 os.makedirs(f'./cublas/harness/{timestemp}')
             else:
