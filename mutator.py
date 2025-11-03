@@ -68,7 +68,7 @@ the codes need to be mutated are as follows:
                  )
             ) # 仅对特定异常重试
         )
-    def robust_chat_completion(the_model="gpt-4o"):
+    def robust_chat_completion(the_model=config['agent']):
         response = openai.chat.completions.create(
             model=the_model,
             # model="gpt-4o-mini-2024-07-18",
@@ -123,7 +123,7 @@ the codes need to be mutated are as follows:
             presence_penalty=0
         )
         return response
-    response = robust_chat_completion(the_model="gpt-4o")
+    response = robust_chat_completion(the_model=config['agent'])
 
     content = response.choices[0].message.content
     try:

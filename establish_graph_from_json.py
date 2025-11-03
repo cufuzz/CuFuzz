@@ -239,7 +239,7 @@ def gen_harness_for_api_senquence(paths, sys_prompt):
                  )
             ) # 仅对特定异常重试
         )
-        def robust_chat_completion(the_model="gpt-4o"):
+        def robust_chat_completion(the_model=config['agent']):
             completion = openai.chat.completions.create(
                 model=the_model,
                 messages=[
@@ -249,7 +249,7 @@ def gen_harness_for_api_senquence(paths, sys_prompt):
             )
             return completion
 
-        response_content = robust_chat_completion(the_model="gpt-4o")
+        response_content = robust_chat_completion(the_model=config['agent'])
         
         print(response_content)
 

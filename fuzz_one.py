@@ -47,7 +47,7 @@ def harness_inti_separate(code, code_file, compilation, mode, suffix= None) -> b
                  )
             ) # 仅对特定异常重试
         )
-    def robust_chat_completion( the_model="gpt-4o"):
+    def robust_chat_completion( the_model=config['agent']):
         response = openai.chat.completions.create(
             # model="gpt-4o-mini-2024-07-18",
             model=the_model,
@@ -92,7 +92,7 @@ def harness_inti_separate(code, code_file, compilation, mode, suffix= None) -> b
         )
         return response
     
-    response = robust_chat_completion( the_model="gpt-4o")
+    response = robust_chat_completion( the_model=config['agent'])
     content = response.choices[0].message.content
     try:
         data = json.loads(content)
@@ -140,7 +140,7 @@ def parse_and_wrap_c_file(config:dict, input_filename:str):
                  )
             ) # 仅对特定异常重试
         )
-    def robust_chat_completion( the_model="gpt-4o"):
+    def robust_chat_completion( the_model=config['agent']):
         response = openai.chat.completions.create(
             model=the_model,
             # model="gpt-4o-mini-2024-07-18",
@@ -198,7 +198,7 @@ def parse_and_wrap_c_file(config:dict, input_filename:str):
         )
         return  response
 
-    response = robust_chat_completion( the_model="gpt-4o")
+    response = robust_chat_completion( the_model=config['agent'])
     content = response.choices[0].message.content
     try:
         data = json.loads(content)
@@ -619,7 +619,7 @@ def check_fix_vulner_of_harness_wrap(the_code: str) -> str:
                 )
             ) # 仅对特定异常重试
         )
-    def robust_chat_completion( the_model="gpt-4o"):
+    def robust_chat_completion( the_model=config['agent']):
         response = openai.chat.completions.create(
             # model="gpt-4o-mini-2024-07-18",
             model=the_model,
@@ -663,7 +663,7 @@ def check_fix_vulner_of_harness_wrap(the_code: str) -> str:
             presence_penalty=0
         )
         return response
-    response = robust_chat_completion( the_model="gpt-4o")
+    response = robust_chat_completion( the_model=config['agent'])
     content = response.choices[0].message.content
 
     data = json.loads(content)

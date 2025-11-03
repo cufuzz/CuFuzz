@@ -77,7 +77,7 @@ class Chatgpt:
                  )
             ) # 仅对特定异常重试
         )
-        def robust_chat_completion(the_messages, the_model="gpt-4o"):
+        def robust_chat_completion(the_messages, the_model=config['agent']):
             response = openai.chat.completions.create(
                 # model="gpt-4o-mini-2024-07-18",
                 model=the_model,
@@ -125,7 +125,7 @@ class Chatgpt:
             )
             return response
 
-        response = robust_chat_completion(the_messages=code_prompt, the_model="gpt-4o")
+        response = robust_chat_completion(the_messages=code_prompt, the_model=config['agent'])
 
         content = response.choices[0].message.content
         try:
@@ -184,7 +184,7 @@ class Chatgpt:
     def generate_input_data(self):
         self.prompt = 'read the code and generate the input data which match the format according to the code'
         response = openai.chat.completions.create(
-            model="gpt-4o-mini-2024-07-18",
+            model=config['agent'],
             # model="gpt-4o",
             messages=[
                 {
@@ -289,7 +289,7 @@ Please adhere to the repair suggestions that have been provided. Try not to use 
                  )
             ) # 仅对特定异常重试
         )
-        def robust_chat_completion(the_messages, the_model="gpt-4o"):
+        def robust_chat_completion(the_messages, the_model=config['agent']):
             response = openai.chat.completions.create(
                 # model="gpt-4o-mini-2024-07-18",
                 model=the_model,
@@ -332,7 +332,7 @@ Please adhere to the repair suggestions that have been provided. Try not to use 
             )
             return response
 
-        response = robust_chat_completion(the_messages=text, the_model="gpt-4o")
+        response = robust_chat_completion(the_messages=text, the_model=config['agent'])
 
         content = response.choices[0].message.content
 
@@ -367,7 +367,7 @@ Please adhere to the repair suggestions that have been provided. Try not to use 
                  )
             ) # 仅对特定异常重试
         )
-        def robust_chat_completion(the_messages, the_model="gpt-4o"):
+        def robust_chat_completion(the_messages, the_model=config['agent']):
             response = openai.chat.completions.create(
                 # model="gpt-4o-mini-2024-07-18",
                 model=the_model,
@@ -409,7 +409,7 @@ Please adhere to the repair suggestions that have been provided. Try not to use 
                 presence_penalty=0
             )
             return response
-        response = robust_chat_completion(the_messages=text, the_model="gpt-4o")
+        response = robust_chat_completion(the_messages=text, the_model=config['agent'])
 
         content = response.choices[0].message.content
         

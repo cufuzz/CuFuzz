@@ -1,7 +1,10 @@
 # which lib you want to fuzz
-lib: 'curand'             # choose one lib you want to test from ['rt', 'nvjpeg', 'cublas', 'cunpp', 'cufft', 'curand', 'cusolver', 'cusparse']
+lib: 'cusparse'             # choose one lib you want to test from ['rt', 'nvjpeg', 'cublas', 'cunpp', 'cufft', 'curand', 'cusolver', 'cusparse']
 
 cuda_v: 'cuda-13.0'
+
+#  choose one, 4o is default , you can also choose 'gpt-4o-mini' ...
+agent: 'gpt-4o'
 
 #  change it with your AFL root path.
 AFL_PATH: '/home/fanximing'                  
